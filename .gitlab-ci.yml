@@ -25,7 +25,7 @@ devBuild:
   only:
     - dev
   tags:
-    - samhita-dev-shared-runner
+    - samhita-skilling-pathway-runner
   allow_failure: false
 
 
@@ -42,5 +42,5 @@ devDeploy:
   only:
     - dev
   tags:
-    - samhita-dev-shared-runner
+    - samhita-skilling-pathway-runner
   allow_failure: false
