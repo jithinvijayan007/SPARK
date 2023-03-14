@@ -1,7 +1,7 @@
 
 import os
 
-from skilling_pathway.api.v1.models import Base
+from skilling_pathway.models import Base
 from flask import Flask, json
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
