@@ -38,4 +38,20 @@ from skilling_pathway.models import Base
 #         DateTime(timezone=True), default=func.now(), server_onupdate=func.now()
 #     )
 
+class InstitutionMaster(Base):
+    __tablename__ = "institution_master"
+
+    id = Column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    company_name = Column(String(250),nullable=False)
+    status = Column(String(25))
+    is_active = Column(Boolean, default=True)
+    created_by = Column(UUID(as_uuid=True))
+    created_at = Column(DateTime(timezone=True), default=func.now())
+    updated_at = Column(
+        DateTime(timezone=True), default=func.now(), server_onupdate=func.now()
+    )
+
+
 
