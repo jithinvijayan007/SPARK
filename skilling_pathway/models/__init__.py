@@ -4,12 +4,20 @@ Base = declarative_base()
 
 from .course import (
     InstitutionMaster,
+    CourseCategory,
+   CourseMaster,
+   CourseModuleMaster,
+   ModuleContentMaster
 )
 # from .project import MaritalStatus2
 
 # course
 __all__ = [
     "InstitutionMaster",
+    "CourseCategory",
+    "CourseMaster",
+    "CourseModuleMaster",
+    "ModuleContentMaster"
     
 ]
 # # project
