@@ -9,6 +9,11 @@ from .course import (
    CourseModuleMaster,
    ModuleContentMaster
 )
+
+from .profile import (
+    ParticipantProfile,
+    ProfileScore
+)
 # from .project import MaritalStatus2
 
 # course
@@ -22,3 +27,8 @@ __all__ = [
 ]
 # # project
 # __all__ += ["MaritalStatus2"]
+
+__all__ += [
+    "ParticipantProfile",
+    "ProfileScore"
+]
