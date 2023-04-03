@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask_restx import Api
 from skilling_pathway.api.v1.resources.course.course import CourseList,CourseByID
-from skilling_pathway.api.v1.resources.profile.profile import ProfileCreateUpdateAPI
+from skilling_pathway.api.v1.resources.profile.profile import ProfileCreateUpdateAPI,ProfileGetAPI
 
 
 v1_blueprint = Blueprint(name="v1", import_name=__name__)
@@ -12,3 +12,4 @@ v1_api.add_resource(CourseByID,'/course/<id>/')
 
 # profile api's
 v1_api.add_resource(ProfileCreateUpdateAPI, '/profile/create_update/')
+v1_api.add_resource(ProfileGetAPI, '/profile/<participant_id>/')
