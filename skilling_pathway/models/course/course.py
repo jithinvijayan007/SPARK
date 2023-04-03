@@ -88,7 +88,7 @@ class CourseMaster(Base):
     total_points = Column(Integer, nullable=True)
     skills = Column(ARRAY(String(50)), nullable=True)
     # course_module = relationship("CourseModuleMaster",back_populates="course")
-    course_content = relationship("ModuleContentMaster",back_populates="course")
+    # course_content = relationship("ModuleContentMaster",back_populates="course")
     # course_category = relationship("CourseCategory",back_populates="course")
     created_by = Column(UUID(as_uuid=True))
     created_at = Column(DateTime(timezone=True), default=func.now())
@@ -137,7 +137,7 @@ class ModuleContentMaster(Base):
         ),
         nullable=True,
     )
-    course = relationship("CourseMaster",back_populates="course_content")
+    # course = relationship("CourseMaster",back_populates="course_content")
     status = Column(String(25))
     is_active = Column(Boolean, default=True)
     created_by = Column(UUID(as_uuid=True))
