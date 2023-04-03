@@ -56,7 +56,7 @@ class ParticipantProfile(Base):
     participant_id = Column(UUID, nullable=True)
     participant_user_id = Column(UUID, nullable=True)
 
-    highest_education = Column(Enum(HighestEducation), nullable=True)
+    highest_education = Column(String, nullable=True)
     english_speaking_level = Column(Enum(EnglishSpeakingLevel), nullable=True)
     other_languages = Column(ARRAY(String), nullable=True)
     current_skills = Column(ARRAY(String), nullable=True)
