@@ -37,14 +37,19 @@ class CourseList(API_Resource):
             headers = {}
 
             response = requests.request("GET", url, headers=headers, data=payload)
-            result = response.json()
-
-
-            return {
+            if response.status_code in (range(200,299)):
+                result = response.json()
+                return {
                 "message": "Courses fetched succefully",
                 "status": True,
                 "data": result
-            }, 200
+                }, 200
+            else:
+                return {
+                "message": response.reason,
+                "status": False,
+                "data": response.reason
+                }, response.status_code            
 
 
         except Exception as e:
