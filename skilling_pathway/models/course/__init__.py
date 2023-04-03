@@ -3,7 +3,8 @@ from .course import (
    CourseCategory,
    CourseMaster,
    CourseModuleMaster,
-   ModuleContentMaster
+   ModuleContentMaster,
+   CourseGrantMaster
 )
 
 __all__ = [
@@ -11,6 +12,7 @@ __all__ = [
     "CourseCategory",
     "CourseMaster",
     "CourseModuleMaster",
-    "ModuleContentMaster"
+    "ModuleContentMaster",
+    "CourseGrantMaster"
     
 ]

@@ -7,7 +7,8 @@ from .course import (
     CourseCategory,
    CourseMaster,
    CourseModuleMaster,
-   ModuleContentMaster
+   ModuleContentMaster,
+   CourseGrantMaster
 )
 
 from .profile import (
@@ -22,7 +23,8 @@ __all__ = [
     "CourseCategory",
     "CourseMaster",
     "CourseModuleMaster",
-    "ModuleContentMaster"
+    "ModuleContentMaster",
+    "CourseGrantMaster"
     
 ]
 # # project
