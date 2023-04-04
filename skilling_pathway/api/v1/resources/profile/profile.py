@@ -1,0 +1,238 @@
+import json
+from datetime import datetime
+from flask import Response
+from sqlalchemy import or_, and_
+from sqlalchemy.orm import aliased
+
+from skilling_pathway.api.v1.decorators import authenticate
+from skilling_pathway.api.v1.json_encoder import AlchemyEncoder
+from skilling_pathway.api.v1.resources.Resource import API_Resource, NameSpace
+from flask import request, current_app
+import requests
+from skilling_pathway.db_session import session
+
+from .parser_helper import *
+from .schema import *
+
+from skilling_pathway.models.profile import *
+
+api = NameSpace("profile")
+
+
+# api to update profile from pre assessment form parsed data
+
+
+class ProfileCreateUpdateAPI(API_Resource):
+    @authenticate
+    @api.expect(profile_create_update_parser)
+    def post(self):
+        try:
+            data = profile_create_update_parser.parse_args()
+            participant_id = data.get("participant_id")
+            form_response = data.get("form_response")
+
+            # get form response
+            form_response = json.loads(form_response)
+
+            # parse form response
+            profile_data = {}
+            required_fields = [
+                "Highest Educational Qualification? (for e.g. 10th Pass)",
+                "English Speaking Level?",
+                "Other Languages?",
+                "Current Skills",
+                "Which Courses are you looking for?",
+                "Preferred Course Language",
+                "Are you currently employed?",
+                "Current Employment Details",
+                "Start Date",
+                "End Date",
+                "Preferred Job Location (State)",
+                "Preferred Job Location (City)",
+                "Preferred Employment Type?",
+                "Preferred Workplace?",
+                "Preferred Job Role?",
+            ]
+            for response in form_response:
+                if response.get("question_name") in required_fields and response.get(
+                    "answer"
+                ):
+                    if (
+                        response.get("question_name")
+                        == "Highest Educational Qualification? (for e.g. 10th Pass)"
+                    ):
+                        profile_data["highest_education"] = response.get("answer")
+                    elif response.get("question_name") == "English Speaking Level?":
+                        profile_data["english_speaking_level"] = [
+                            x.strip()
+                            for x in response.get("answer").split(",")
+                            if x.strip()
+                        ]
+                    elif response.get("question_name") == "Other Languages?":
+                        profile_data["other_languages"] = [
+                            x.strip()
+                            for x in response.get("answer").split(",")
+                            if x.strip()
+                        ]
+                    elif response.get("question_name") == "Current Skills":
+                        profile_data["current_skills"] = [
+                            x.strip()
+                            for x in response.get("answer").split(",")
+                            if x.strip()
+                        ]
+                    elif (
+                        response.get("question_name")
+                        == "Which Courses are you looking for?"
+                    ):
+                        profile_data["interested_course"] = [
+                            x.strip()
+                            for x in response.get("answer").split(",")
+                            if x.strip()
+                        ]
+                    elif response.get("question_name") == "Preferred Course Language":
+                        profile_data["preferred_course_language"] = [
+                            x.strip()
+                            for x in response.get("answer").split(",")
+                            if x.strip()
+                        ]
+                    elif response.get("question_name") == "Are you currently employed?":
+                        profile_data["current_employment_status"] = (
+                            response.get("answer") == "Yes"
+                        )
+                    elif response.get("question_name") == "Current Employment Details":
+                        profile_data["current_employment_details"] = response.get(
+                            "answer"
+                        )
+                    elif response.get("question_name") == "Start Date":
+                        profile_data["employment_start_date"] = response.get("answer")
+                    elif response.get("question_name") == "End Date":
+                        profile_data["employment_end_date"] = response.get("answer")
+                    elif (
+                        response.get("question_name")
+                        == "Preferred Job Location (State)"
+                    ):
+                        profile_data["preferred_job_location_state"] = [
+                            x.strip()
+                            for x in response.get("answer").split(",")
+                            if x.strip()
+                        ]
+                    elif (
+                        response.get("question_name") == "Preferred Job Location (City)"
+                    ):
+                        profile_data["preferred_job_location_city"] = [
+                            x.strip()
+                            for x in response.get("answer").split(",")
+                            if x.strip()
+                        ]
+                    elif response.get("question_name") == "Preferred Employment Type?":
+                        profile_data["preferred_employment_type"] = [
+                            x.strip()
+                            for x in response.get("answer").split(",")
+                            if x.strip()
+                        ]
+                    elif response.get("question_name") == "Preferred Workplace?":
+                        profile_data["preferred_work_place_type"] = [
+                            x.strip()
+                            for x in response.get("answer").split(",")
+                            if x.strip()
+                        ]
+                    elif response.get("question_name") == "Preferred Job Role?":
+                        profile_data["preferred_job_role"] = [
+                            x.strip()
+                            for x in response.get("answer").split(",")
+                            if x.strip()
+                        ]
+            print(profile_data)
+            if not (
+                profile := session.query(ParticipantProfile)
+                .filter(ParticipantProfile.participant_id == participant_id)
+                .first()
+            ):
+                # create profile
+                profile = ParticipantProfile(**profile_data)
+                session.add(profile)
+                session.commit()
+                profile.participant_id = participant_id
+                session.commit()
+                return {"status": True, "message": "Profile created successfully"}, 200
+            else:
+                # update profile with appending the data to array fields only if they don't exist
+                # define a list of fields that can be appended to
+                appendable_fields = [
+                    "english_speaking_level",
+                    "other_languages",
+                    "current_skills",
+                    "interested_course",
+                    "preferred_course_language",
+                    "preferred_job_location_state",
+                    "preferred_job_location_city",
+                    "preferred_employment_type",
+                    "preferred_work_place_type",
+                    "preferred_job_role",
+                ]
+
+                # loop through each field in profile_data and update profile
+                for field, value in profile_data.items():
+                    # handle appendable fields separately
+                    if field in appendable_fields:
+                        # only append to the field if it doesn't exist yet
+                        if not getattr(profile, field):
+                            setattr(profile, field, value)
+                        else:
+                            existing_values = getattr(profile, field)
+                            # convert existing values to lowercase
+                            existing_values_lower = [
+                                val.lower() for val in existing_values
+                            ]
+                            # convert new values to lowercase
+                            new_values_lower = [val.lower() for val in value]
+                            # combine and remove duplicates
+                            combined_values_lower = list(
+                                set(existing_values_lower + new_values_lower)
+                            )
+                            # convert back to original case
+                            combined_values = [
+                                val.title() for val in combined_values_lower
+                            ]
+                            setattr(profile, field, combined_values)
+                    else:
+                        setattr(profile, field, value)
+
+                # commit the changes
+                session.commit()
+
+                return {"status": True, "message": "Profile updated successfully"}, 200
+
+        except Exception as e:
+            session.rollback()
+            session.commit()
+            return {
+                "status": False,
+                "message": "Something went wrong",
+                "error": str(e),
+            }, 500
+
+
+# profile get api
+class ProfileGetAPI(API_Resource):
+    @authenticate
+    @api.expect(participant_profile_get_parser)
+    def get(self, participant_id):
+        try:
+            args = participant_profile_get_parser.parse_args()
+            if not (profile := session.query(ParticipantProfile).filter(
+                ParticipantProfile.participant_id == participant_id
+            ).first()):
+                return {"status": False, "message": "Profile not found"}, 404
+            else:
+                profile_data = profile.__dict__
+                profile_data['id'] = str(profile_data['id'])
+                profile_data['participant_id'] = str(profile_data['participant_id'])
+                profile_data.pop("_sa_instance_state")
+                return {"status": True, "data": profile_data}, 200
+        except Exception as e:
+            return {
+                "status": False,
+                "message": "Something went wrong",
+                "error": str(e),
+            }, 500

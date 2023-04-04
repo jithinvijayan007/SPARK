@@ -22,34 +22,6 @@ from sqlalchemy.dialects.postgresql import ARRAY
 from skilling_pathway.models import Base
 
 
-# choices
-
-class HighestEducation(enum.Enum):
-    HIGH_SCHOOL = "High School"
-    GRADUATE = "Graduate"
-    POST_GRADUATE = "Post Graduate"
-    DOCTORATE = "Doctorate"
-
-
-class EnglishSpeakingLevel(enum.Enum):
-    BASIC = "Basic"
-    INTERMEDIATE = "Intermediate"
-    FLUENT = "Fluent"
-    NO_ENGLISH = "No English"
-
-
-class EmploymentType(enum.Enum):
-    FULL_TIME = "Full Time"
-    PART_TIME = "Part Time"
-    CONTRACT = "Contract"
-
-
-class WorkPlaceType(enum.Enum):
-    OFFICE = "Office"
-    WORK_FROM_HOME = "Work From Home"
-    WORK_FROM_FIELD = "Work From Field"
-
-
 class ParticipantProfile(Base):
     __tablename__ = "participant_profile"
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True)
