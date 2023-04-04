@@ -57,7 +57,7 @@ class ParticipantProfile(Base):
     participant_user_id = Column(UUID, nullable=True)
 
     highest_education = Column(String, nullable=True)
-    english_speaking_level = Column(Enum(EnglishSpeakingLevel), nullable=True)
+    english_speaking_level = Column(ARRAY(String), nullable=True)
     other_languages = Column(ARRAY(String), nullable=True)
     current_skills = Column(ARRAY(String), nullable=True)
 
@@ -70,18 +70,16 @@ class ParticipantProfile(Base):
     employment_end_date = Column(Date, nullable=True)
     preferred_job_location_state = Column(ARRAY(String), nullable=True)
     preferred_job_location_city = Column(ARRAY(String), nullable=True)
-    preferred_employment_type = Column(Enum(EmploymentType), nullable=True)
-    preferred_work_place_type = Column(Enum(WorkPlaceType), nullable=True)
+    preferred_employment_type = Column(ARRAY(String), nullable=True)
+    preferred_work_place_type = Column(ARRAY(String), nullable=True)
     preferred_job_role = Column(ARRAY(String), nullable=True)
 
-    profile_score = relationship("ProfileScore", back_populates="participant_profile")
+    profile_scores = relationship("ProfileScore", back_populates="participant_profile")
 
 
 class ProfileScore(Base):
     __tablename__ = "profile_score"
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True)
-    participant_id = Column(UUID, nullable=True)
-    participant_user_id = Column(UUID, nullable=True)
-    participant_profile_id = Column(UUID, nullable=True)
-    participant_profile = relationship("ParticipantProfile", back_populates="profile_score")
-    score = Column(Float, nullable=True)
+    score = Column(Float, nullable=False)
+    participant_profile_id = Column(UUID(as_uuid=True), ForeignKey("participant_profile.id"))
+    participant_profile = relationship("ParticipantProfile", back_populates="profile_scores")
