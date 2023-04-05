@@ -232,6 +232,8 @@ class ProfileGetAPI(API_Resource):
                 profile_data.pop("_sa_instance_state")
                 return {"status": True, "data": profile_data}, 200
         except Exception as e:
+            session.rollback()
+            session.commit()
             return {
                 "status": False,
                 "message": "Something went wrong",
