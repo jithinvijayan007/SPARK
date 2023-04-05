@@ -20,7 +20,9 @@ from sqlalchemy.orm import relationship, backref
 from sqlalchemy.dialects.postgresql import ARRAY
 
 from skilling_pathway.models import Base
-
+from pymongo import ASCENDING, DESCENDING
+from bson.objectid import ObjectId
+from skilling_pathway.api.extensions import client
 
 class ParticipantProfile(Base):
     __tablename__ = "participant_profile"
@@ -55,3 +57,36 @@ class ProfileScore(Base):
     score = Column(Float, nullable=False)
     participant_profile_id = Column(UUID(as_uuid=True), ForeignKey("participant_profile.id"))
     participant_profile = relationship("ParticipantProfile", back_populates="profile_scores")
+
+
+mg_db = client.skilling_pathway
+
+class ParticipantProfileSchema:
+    collection = mg_db.participant_profile
+
+    @staticmethod
+    def create_index():
+        ParticipantProfileSchema.collection.create_index([('id', ASCENDING)], unique=True)
+
+    @staticmethod
+    def from_dict(data):
+        return {
+            'id': ObjectId(),
+            'participant_id': data.get('participant_id'),
+            'participant_user_id': data.get('participant_user_id'),
+            'highest_education': data.get('highest_education'),
+            'english_speaking_level': data.get('english_speaking_level'),
+            'other_languages': data.get('other_languages'),
+            'current_skills': data.get('current_skills'),
+            'interested_course': data.get('interested_course'),
+            'preferred_course_language': data.get('preferred_course_language'),
+            'current_employment_status': data.get('current_employment_status'),
+            'current_employment_details': data.get('current_employment_details'),
+            'employment_start_date': data.get('employment_start_date'),
+            'employment_end_date': data.get('employment_end_date'),
+            'preferred_job_location_state': data.get('preferred_job_location_state'),
+            'preferred_job_location_city': data.get('preferred_job_location_city'),
+            'preferred_employment_type': data.get('preferred_employment_type'),
+            'preferred_work_place_type': data.get('preferred_work_place_type'),
+            'preferred_job_role': data.get('preferred_job_role')
+        }

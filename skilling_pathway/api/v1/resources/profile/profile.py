@@ -13,6 +13,7 @@ from skilling_pathway.db_session import session
 
 from .parser_helper import *
 from .schema import *
+from ....extensions import client
 
 from skilling_pathway.models.profile import *
 
@@ -236,3 +237,40 @@ class ProfileGetAPI(API_Resource):
                 "message": "Something went wrong",
                 "error": str(e),
             }, 500
+
+
+# new profile post api with mongodb database
+class ProfileAPI(API_Resource):
+
+    def get(self):
+        collection = client.skilling_pathway.get_collection("participant_profile")
+        profile = collection.find()
+        return {"status": True, "data": list(profile)}, 200
+
+    def post(self):
+        collection = client.skilling_pathway.get_collection("participant_profile")
+        new_work_experiences = [
+            {
+                "title": "Software Developer",
+                "company": "ABC Inc",
+                "start_date": "2020-01-01",
+                "end_date": "2021-01-01"
+            },
+            {
+                "title": "Data Analyst",
+                "company": "XYZ Corp",
+                "start_date": "2019-01-01",
+                "end_date": "2020-01-01"
+            }
+        ]
+        profile = collection.insert_one({
+            "participant_id": "5f9f1b5b9b9b9b9b9b9b9b9b",
+            "first_name": "John",
+            "last_name": "Doe"
+        })
+        collection.update_one(
+            {"_id": profile.inserted_id},
+            {"$push": {"work_experiences": {"$each": new_work_experiences}}}
+        )
+
+        return {"status": True, "data": str(profile.inserted_id)}, 200

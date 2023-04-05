@@ -1,5 +1,8 @@
 from celery import Celery
 import os
+from pymongo import MongoClient
+
+client = MongoClient('mongodb://localhost:27017/')
 
 celery = Celery(
     "app",
