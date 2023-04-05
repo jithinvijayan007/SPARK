@@ -15,6 +15,8 @@ from .profile import (
     ParticipantProfile,
     ProfileScore
 )
+
+from .resume_builder import (ResumeBuilder)
 # from .project import MaritalStatus2
 
 # course
@@ -32,5 +34,6 @@ __all__ = [
 
 __all__ += [
     "ParticipantProfile",
-    "ProfileScore"
+    "ProfileScore",
+    'ResumeBuilder'
 ]

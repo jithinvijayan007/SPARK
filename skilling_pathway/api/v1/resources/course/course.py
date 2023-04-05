@@ -13,7 +13,8 @@ import requests
 from skilling_pathway.api.v1.decorators import authenticate
 from .parser_helper import (
     course_list_parser,
-    course_by_id_parser
+    course_by_id_parser,
+    course_content_parser
 )
 
 # from .course import (
@@ -31,7 +32,7 @@ class CourseList(API_Resource):
     def get(self):
         try:
 
-            url = "https://lms.samhita.org//webservice/rest/server.php?wstoken=9b90383be92709097c2edb05a1dfa7b5&wsfunction=core_course_get_courses&moodlewsrestformat=json"
+            url = "https://dev.lms.samhita.org//webservice/rest/server.php?wstoken=9b90383be92709097c2edb05a1dfa7b5&wsfunction=core_course_get_courses&moodlewsrestformat=json"
 
             payload={}
             headers = {}
@@ -69,7 +70,7 @@ class CourseByID(API_Resource):
     @api.expect(course_by_id_parser)
     def get(self, id):
         try:
-            url = f"https://lms.samhita.org//webservice/rest/server.php?wstoken=9b90383be92709097c2edb05a1dfa7b5&wsfunction=core_course_get_courses&moodlewsrestformat=json&options[ids][0]={id}"
+            url = f"https://dev.lms.samhita.org//webservice/rest/server.php?wstoken=9b90383be92709097c2edb05a1dfa7b5&wsfunction=core_course_get_courses&moodlewsrestformat=json&options[ids][0]={id}"
 
             payload={}
             headers = {}
@@ -81,7 +82,7 @@ class CourseByID(API_Resource):
 
 
             return {
-                "message": "Courses details succefully",
+                "message": "Courses details fetched succefully",
                 "status": True,
                 "data": result
             }, 200
@@ -97,3 +98,77 @@ class CourseByID(API_Resource):
                 "status": False,
                 "type": "custom_error"
             }, 400
+        
+class CourseListNew(API_Resource):
+    @authenticate
+    @api.expect(course_list_parser)
+    def get(self):
+        try:
+
+            url = "https://dev.lms.samhita.org//webservice/rest/server.php?wstoken=9b90383be92709097c2edb05a1dfa7b5&wsfunction=core_course_get_courses_by_field&moodlewsrestformat=json"
+
+            payload={}
+            headers = {}
+
+            response = requests.request("GET", url, headers=headers, data=payload)
+            if response.status_code in (range(200,299)):
+                result = response.json()
+                return {
+                "message": "Courses fetched succefully",
+                "status": True,
+                "data": result
+                }, 200
+            else:
+                return {
+                "message": response.reason,
+                "status": False,
+                "data": response.reason
+                }, response.status_code            
+
+
+        except Exception as e:
+            import traceback
+            print(e)
+            session.rollback()
+            session.commit()
+            return {
+                "message": str(traceback.format_exc()),
+                "status": False,
+                "type": "custom_error"
+            }, 400
+        
+
+class CourseContentAPI(API_Resource):
+    @authenticate
+    @api.expect(course_content_parser)
+    def get(self, id):
+        try:
+            url = f"https://dev.lms.samhita.org//webservice/rest/server.php?wstoken=9b90383be92709097c2edb05a1dfa7b5&wsfunction=core_course_get_contents&moodlewsrestformat=json&courseid={id}"
+
+            payload={}
+            headers = {}
+
+            response = requests.request("GET", url, headers=headers, data=payload)
+
+
+            result = response.json()
+
+
+            return {
+                "message": "Courses details fetched succefully",
+                "status": True,
+                "data": result
+            }, 200
+
+
+        except Exception as e:
+            import traceback
+            print(e)
+            session.rollback()
+            session.commit()
+            return {
+                "message": str(traceback.format_exc()),
+                "status": False,
+                "type": "custom_error"
+            }, 400
+
