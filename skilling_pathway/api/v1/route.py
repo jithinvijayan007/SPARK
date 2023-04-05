@@ -12,13 +12,17 @@ from skilling_pathway.api.v1.resources.profile.profile import ProfileCreateUpdat
 v1_blueprint = Blueprint(name="v1", import_name=__name__)
 v1_api = Api(app=v1_blueprint, prefix="/",doc='/apidocs/')
 
+# course api's
 v1_api.add_resource(CourseList,'/course/list/')
 v1_api.add_resource(CourseByID,'/course/<id>/')
+v1_api.add_resource(CourseListNew,'/course/list/new/')
+v1_api.add_resource(CourseContentAPI,'/course_content/<id>/')
 
 # profile api's
 v1_api.add_resource(ProfileCreateUpdateAPI, '/profile/create_update/')
 v1_api.add_resource(ProfileGetAPI, '/profile/<participant_id>/')
 v1_api.add_resource(ProfileAPI, '/profile/')
+
+
 v1_api.add_resource(ResumeBuilder,'/resume-builder/')
-v1_api.add_resource(CourseListNew,'/course/list/new/')
-v1_api.add_resource(CourseContentAPI,'/course_content/<id>/')
+
