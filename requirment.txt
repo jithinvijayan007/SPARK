@@ -47,3 +47,4 @@ zipp==3.8.1
 redis
 celery
 Flask-Admin==1.5.8
+pymongo==4.3.3
