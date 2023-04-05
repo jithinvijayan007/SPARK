@@ -226,10 +226,7 @@ class ProfileGetAPI(API_Resource):
             ).first()):
                 return {"status": False, "message": "Profile not found"}, 404
             else:
-                profile_data = profile.__dict__
-                profile_data['id'] = str(profile_data['id'])
-                profile_data['participant_id'] = str(profile_data['participant_id'])
-                profile_data.pop("_sa_instance_state")
+                profile_data = json.loads(json.dumps(profile, cls=AlchemyEncoder))
                 return {"status": True, "data": profile_data}, 200
         except Exception as e:
             session.rollback()
