@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask_restx import Api
 from skilling_pathway.api.v1.resources.course.course import CourseList,CourseByID
-from skilling_pathway.api.v1.resources.profile.profile import ProfileCreateUpdateAPI,ProfileGetAPI
+from skilling_pathway.api.v1.resources.profile.profile import ProfileCreateUpdateAPI,ProfileGetAPI,ProfileAPI
 
 
 v1_blueprint = Blueprint(name="v1", import_name=__name__)
