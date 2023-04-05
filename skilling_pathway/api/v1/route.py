@@ -1,6 +1,9 @@
 from flask import Blueprint
 from flask_restx import Api
-from skilling_pathway.api.v1.resources.course.course import CourseList,CourseByID
+from skilling_pathway.api.v1.resources.course.course import (
+                                                    CourseList,CourseByID,
+                                                    CourseListNew,CourseContentAPI
+)
 from skilling_pathway.api.v1.resources.resume_builder.resume_builder import ResumeBuilder
 
 
@@ -10,3 +13,5 @@ v1_api = Api(app=v1_blueprint, prefix="/",doc='/apidocs/')
 v1_api.add_resource(CourseList,'/course/list/')
 v1_api.add_resource(CourseByID,'/course/<id>/')
 v1_api.add_resource(ResumeBuilder,'/resume-builder/')
+v1_api.add_resource(CourseListNew,'/course/list/new/')
+v1_api.add_resource(CourseContentAPI,'/course_content/<id>/')
