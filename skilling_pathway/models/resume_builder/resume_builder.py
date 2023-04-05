@@ -34,7 +34,7 @@ class ResumeBuilder(Base):
     skills = Column(ARRAY(String), nullable=True)
     work_experience = Column(JSON,nullable=True)
     certification = Column(ARRAY(UUID),nullable=True)
-    other_certifications = Column(JSON,nullable=True)
+    # other_certifications = Column(JSON,nullable=True)
     is_active = Column(Boolean,default=True)
     created_by = Column(UUID, nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)

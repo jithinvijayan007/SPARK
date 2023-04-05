@@ -18,12 +18,13 @@ from skilling_pathway.api.v1.resources.Resource import API_Resource, NameSpace
 api = NameSpace('ResumeBuilder')
 
 class ResumeBuilder(API_Resource):
-    @authenticate
+    # @authenticate
     @api.expect(resume_builder_parser)
     def post(self):
         try:
             result = []
-
+            data = resume_builder_parser.parse_args()
+            print(data)
             return {
                 "message": "Resume Created succefully",
                 "status": True,
