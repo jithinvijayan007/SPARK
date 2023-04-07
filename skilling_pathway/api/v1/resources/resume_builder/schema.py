@@ -38,6 +38,8 @@ def get_resume_details(data):
                     'educational_qualification':resume_obj.education_qualification,
                     'skills':resume_obj.skills,
                     'work_experience':resume_obj.work_experience,
+                    'gender':resume_obj.gender,
+                    'email':resume_obj.email
                     
             }
         
