@@ -27,7 +27,7 @@ class ResumeBuilder(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True)
     name = Column(TEXT)
     mobile = Column(String(15),nullable=True)
-    email  = Column(String(15),nullable=True)
+    email  = Column(String(30),nullable=True)
     gender = Column(String(5),nullable=True)
     current_address = Column(TEXT, nullable=True)
     education_qualification = Column(ARRAY(String), nullable=True)
