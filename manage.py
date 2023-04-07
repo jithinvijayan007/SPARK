@@ -3,8 +3,6 @@ from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 
 from wsgi import app, db
-import nltk
-nltk.download('stopwords')
 
 app.config.from_object(os.environ['APP_SETTINGS'])
 

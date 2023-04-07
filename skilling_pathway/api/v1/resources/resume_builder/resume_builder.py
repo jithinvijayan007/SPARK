@@ -17,7 +17,7 @@ from .parser_helper import (
     resume_parser,
     resume_filter_parser,    
 )
-from pyresparser import ResumeParser
+# from pyresparser import ResumeParser
 from skilling_pathway.api.v1.resources.Resource import API_Resource, NameSpace
 api = NameSpace('ResumeBuilder')
 
@@ -64,10 +64,10 @@ class ResumeBuilderAPI(API_Resource):
                 "type": "custom_error"
             }, 400
 
-def show_data(data):
-    path = 'https://s3revive.s3.amazonaws.com/uploads/aaa.pdf'
-    data = ResumeParser(path).get_extracted_data()
-    return data
+# def show_data(data):
+#     path = 'https://s3revive.s3.amazonaws.com/uploads/aaa.pdf'
+#     data = ResumeParser(path).get_extracted_data()
+#     return data
 
 class UploadResume(API_Resource):
     @api.expect(resume_parser)
