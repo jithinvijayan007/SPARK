@@ -24,6 +24,3 @@ def insert_resume_data(data):
                 "message": "Something went wrong",
                 "error": str(e),
             }, 500
-
-    
-    

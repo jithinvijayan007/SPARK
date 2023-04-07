@@ -4,7 +4,8 @@ from skilling_pathway.api.v1.resources.course.course import (
                                                     CourseList,CourseByID,
                                                     CourseListNew,CourseContentAPI
 )
-from skilling_pathway.api.v1.resources.resume_builder.resume_builder import ResumeBuilder
+from skilling_pathway.api.v1.resources.resume_builder.resume_builder import (ResumeBuilder,
+                                                                             UploadResume)
 from skilling_pathway.api.v1.resources.course.course import CourseList,CourseByID
 from skilling_pathway.api.v1.resources.profile.profile import ProfileCreateUpdateAPI,ProfileGetAPI,ProfileAPI
 
@@ -24,4 +25,6 @@ v1_api.add_resource(ProfileGetAPI, '/profile/<participant_id>/')
 v1_api.add_resource(ProfileAPI, '/profile/')
 
 v1_api.add_resource(ResumeBuilder,'/resume-builder/')
+v1_api.add_resource(UploadResume,'/resume-upload/')
+
 
