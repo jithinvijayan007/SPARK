@@ -74,7 +74,6 @@ class UploadResume(API_Resource):
     def post(self):
         try:
             resume_file = request.files['resume']
-            import pdb;pdb.set_trace()
              #This prints the file name of the uploaded file
             print(resume_file.filename)
             #I want to save the uploaded file as logo.png. No matter what the uploaded file name was.
