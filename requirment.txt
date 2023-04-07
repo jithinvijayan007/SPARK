@@ -48,3 +48,6 @@ redis
 celery
 Flask-Admin==1.5.8
 pymongo==4.3.3
+pyresparser==1.0.6
+nltk==3.8.1
+spacy==2.3.5
