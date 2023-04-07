@@ -10,7 +10,7 @@ from urllib.error import HTTPError
 from sqlalchemy import func
 from skilling_pathway.db_session import session
 import requests
-from . schema import insert_resume_data
+from . schema import insert_resume_data, get_resume_details
 from skilling_pathway.api.v1.decorators import authenticate
 from .parser_helper import (
     resume_builder_parser,
@@ -22,7 +22,7 @@ from skilling_pathway.api.v1.resources.Resource import API_Resource, NameSpace
 api = NameSpace('ResumeBuilder')
 
 
-class ResumeBuilder(API_Resource):
+class ResumeBuilderAPI(API_Resource):
     # @authenticate
     @api.expect(resume_builder_parser)
     def post(self):
@@ -40,18 +40,17 @@ class ResumeBuilder(API_Resource):
                 "status": False,
                 "type": "custom_error"
             }, 400
+    
     @api.expect(resume_filter_parser)
     def get(self):
         try:
             data = resume_filter_parser.parse_args()
-            users = session.query(ResumeBuilder).filter(ResumeBuilder.id !=data.get('id')).\
-                    order_by(ResumeBuilder.created_at.desc())
-            import pdb;pdb.set_trace()
+            resume_details = get_resume_details(data)
             
             return {
                 "message": "Resume Created succefully",
                 "status": True,
-                "data": []
+                "data": resume_details
             }, 200
              
         except Exception as e:

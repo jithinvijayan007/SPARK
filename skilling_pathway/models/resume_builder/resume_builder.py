@@ -28,7 +28,7 @@ class ResumeBuilder(Base):
     name = Column(TEXT)
     mobile = Column(String(15),nullable=True)
     email  = Column(String(15),nullable=True)
-    gender = Column(String(5),nullable=True)
+    # gender = Column(String(5),nullable=True)
     current_address = Column(TEXT, nullable=True)
     education_qualification = Column(ARRAY(String), nullable=True)
     skills = Column(ARRAY(String), nullable=True)

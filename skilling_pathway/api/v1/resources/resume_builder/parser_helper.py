@@ -30,4 +30,4 @@ resume_filter_parser = reqparse.RequestParser()
 resume_filter_parser.add_argument(
     'access-token',type=str,location='headers',required=True,
 )
-resume_filter_parser.add_argument('id',type=str,location='json', required=False)
+resume_filter_parser.add_argument('id',type=str, required=False)
