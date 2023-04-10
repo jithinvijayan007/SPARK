@@ -19,6 +19,11 @@ from .parser_helper import (
 )
 # from pyresparser import ResumeParser
 from skilling_pathway.api.v1.resources.Resource import API_Resource, NameSpace
+from pyresparser import ResumeParser
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))))
+RESUME_DIR = os.path.join(os.path.join(BASE_DIR,'static'),'resumes')
+
 api = NameSpace('ResumeBuilder')
 
 
@@ -64,10 +69,9 @@ class ResumeBuilderAPI(API_Resource):
                 "type": "custom_error"
             }, 400
 
-# def show_data(data):
-#     path = 'https://s3revive.s3.amazonaws.com/uploads/aaa.pdf'
-#     data = ResumeParser(path).get_extracted_data()
-#     return data
+def resume_parser(path):
+    data = ResumeParser(path).get_extracted_data()
+    return data
 
 class UploadResume(API_Resource):
     @api.expect(resume_parser)
@@ -75,10 +79,19 @@ class UploadResume(API_Resource):
         try:
             resume_file = request.files['resume']
              #This prints the file name of the uploaded file
-            print(resume_file.filename)
-            #I want to save the uploaded file as logo.png. No matter what the uploaded file name was.
-            resume_file.save(resume_file.filename)
-            #print(show_data(data))
+            resume_path = os.path.join(RESUME_DIR,resume_file.filename) 
+            import pdb;pdb.set_trace()
+            resume_file.save(resume_path)
+            json_data = resume_parser(resume_path)
+            
+            if os.path.exists(resume_path):
+                os.remove(resume_path)
+            return {
+                "message": "Resume Created succefully",
+                "status": True,
+                "data": json_data
+            }, 200
+
         except Exception as e:
             import traceback
             print(e)
