@@ -79,8 +79,7 @@ class UploadResume(API_Resource):
         try:
             resume_file = request.files['resume']
              #This prints the file name of the uploaded file
-            resume_path = os.path.join(RESUME_DIR,resume_file.filename) 
-            import pdb;pdb.set_trace()
+            resume_path = os.path.join(RESUME_DIR,resume_file.filename)
             resume_file.save(resume_path)
             json_data = resume_parser(resume_path)
             
