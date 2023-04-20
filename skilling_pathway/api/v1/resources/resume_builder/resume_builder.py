@@ -163,6 +163,8 @@ class TextractResume(API_Resource):
             file = data.get('file')
             # Store Pdf with convert_from_path function
             images = convert_from_path(resume_path)
+            if os.path.exists(resume_path):
+                os.remove(resume_path)
             
             # for i in range(len(images)):
             
@@ -215,11 +217,29 @@ class TextractResume(API_Resource):
                 FeatureTypes=["FORMS"])
                 doc = Document(response)
                 print ('------------- Print Form detected text ------------------------------')
+                
+                response_dic = {}
                 for page in doc.pages:
+                    
                     for field in page.form.fields:
+                        dic={}
                         resp = ("Key: {}, Value: {}".format(field.key, field.value))
-                        responses.append(resp)
-            return responses
+                        dic[str(field.key)] = str(field.value)
+                        responses.append(dic)
+                for d in responses:
+                    for key in d.keys():
+                        if 'email' in key.lower():
+                            response_dic['email'] = d[key]
+                        elif 'skill' in key.lower():
+                            response_dic['skills'] = d[key]
+                        elif 'education' in key.lower():
+                            response_dic['education'] = d[key]
+                        elif 'language' in key.lower():
+                            response_dic['languages'] = d[key]
+                        
+                        
+            return {'created response':response_dic,
+                    'original_response' : responses}
         except Exception as e:
             import traceback
             print(e)
