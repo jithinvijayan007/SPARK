@@ -69,3 +69,44 @@ def get_resume_details(data):
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
 '''
+
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+
+def allowed_file(filename):
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+import os
+from werkzeug.utils import secure_filename
+import boto3
+import mimetypes
+
+def upload_file_to_s3(file, acl="public-read"):
+    filename = secure_filename(file.name)
+
+    content_type = mimetypes.guess_type(file.name)
+    s3 = boto3.client(
+            "s3",
+            aws_access_key_id=os.getenv('AWS_S3_ACCESS_KEY_ID'),
+            aws_secret_access_key=os.getenv('AWS_S3_SECRET_ACCESS_KEY')
+        )
+    try:
+        s3.upload_fileobj(
+            file,
+            os.getenv("AWS_S3_BUCKET_NAME"),
+            f"{file.name}",
+            ExtraArgs={
+                "ACL": acl,
+                "ContentType": content_type[0]
+            }
+        )
+    except Exception as e:
+        # This is a catch all exception, edit this part to fit your needs.
+        print("Something Happened: ", e)
+        return e
+    
+
+    # after upload file to s3 bucket, return filename of the uploaded file
+    return file.name
