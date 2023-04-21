@@ -47,6 +47,12 @@ class ParticipantProfile(Base):
     preferred_employment_type = Column(ARRAY(String), nullable=True)
     preferred_work_place_type = Column(ARRAY(String), nullable=True)
     preferred_job_role = Column(ARRAY(String), nullable=True)
+    mobile = Column(String(15),nullable=True)
+    email  = Column(String(45),nullable=True)
+    gender = Column(String(10),nullable=True)
+    address = Column(String, nullable=True)
+    certificates = Column(ARRAY(String), nullable=True)
+    educational_qualifications = Column(ARRAY(String), nullable=True)
 
     profile_scores = relationship("ProfileScore", back_populates="participant_profile")
 
