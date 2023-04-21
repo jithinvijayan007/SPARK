@@ -79,7 +79,6 @@ class UploadResume(API_Resource):
     def post(self):
         try:
             resume_file = request.files['resume']
-            import pdb;pdb.set_trace()
              #This prints the file name of the uploaded file
             resume_path = os.path.join(RESUME_DIR,resume_file.filename)
             resume_file.save(resume_path)
@@ -150,7 +149,7 @@ from trp import Document
 
  
 class TextractResume(API_Resource):
-    @api.expect(resume_parser)
+    # @api.expect(resume_parser)
     def post(self):
         try:            
             resume_file = request.files['resume']
@@ -159,8 +158,8 @@ class TextractResume(API_Resource):
             resume_file.save(resume_path)
             # json_data = resume_parser(resume_path)
 
-            data = comprehend_resume_parser.parse_args()
-            file = data.get('file')
+            # data = comprehend_resume_parser.parse_args()
+            # file = data.get('file')
             # Store Pdf with convert_from_path function
             images = convert_from_path(resume_path)
             if os.path.exists(resume_path):
