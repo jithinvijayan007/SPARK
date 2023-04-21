@@ -38,3 +38,10 @@ comprehend_resume_parser = reqparse.RequestParser()
 # )
 comprehend_resume_parser.add_argument(
     'file', type=werkzeug.datastructures.FileStorage, location='files')
+
+s3_file_upload_parser = reqparse.RequestParser()
+# s3_file_upload_parser.add_argument(
+#     'access-token',type=str,location='headers',required=True,
+# )
+s3_file_upload_parser.add_argument(
+    'file', type=werkzeug.datastructures.FileStorage, location='files')

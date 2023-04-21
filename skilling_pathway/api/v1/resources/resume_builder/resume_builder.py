@@ -2,6 +2,7 @@ from http.client import HTTPException
 import json
 import math
 import copy
+import time
 from io import BytesIO
 from flask import send_file,request
 import os
@@ -9,14 +10,21 @@ from sqlite3 import ProgrammingError
 from urllib.error import HTTPError
 from sqlalchemy import func
 from skilling_pathway.db_session import session
+import boto3
+from botocore.exceptions import ClientError       
+from PyPDF2 import PdfReader
+from pdf2image import convert_from_path
+from trp import Document
+
 import requests
-from . schema import insert_resume_data, get_resume_details, allowed_file, upload_file_to_s3
+from . schema import insert_resume_data, get_resume_details, allowed_file, upload_file_to_s3, upload_file_to_s3_textract
 from skilling_pathway.api.v1.decorators import authenticate
 from .parser_helper import (
     resume_builder_parser,
     resume_parser,
     resume_filter_parser,
-    comprehend_resume_parser  
+    comprehend_resume_parser,
+    s3_file_upload_parser
 )
 # from pyresparser import ResumeParser
 from skilling_pathway.api.v1.resources.Resource import API_Resource, NameSpace
@@ -102,9 +110,6 @@ class UploadResume(API_Resource):
                 "status": False,
                 "type": "custom_error"
             }, 400
-import boto3
-from botocore.exceptions import ClientError       
-from PyPDF2 import PdfReader
 class ComprehentResume(API_Resource):
     @api.expect(comprehend_resume_parser)
     def post(self):
@@ -141,12 +146,6 @@ class ComprehentResume(API_Resource):
                 "type": "custom_error"
             }, 400
         
-
-from pdf2image import convert_from_path
-
-import boto3
-from trp import Document
-
  
 class TextractResume(API_Resource):
     # @api.expect(resume_parser)
@@ -239,6 +238,70 @@ class TextractResume(API_Resource):
                         
             return {'created response':response_dic,
                     'original_response' : responses}
+        except Exception as e:
+            import traceback
+            print(e)
+            session.rollback()
+            session.commit()
+            return {
+                "message": str(traceback.format_exc()),
+                "status": False,
+                "type": "custom_error"
+            }, 400
+        
+
+class TextractPdfResume(API_Resource):
+    @api.expect(s3_file_upload_parser)
+    def post(self):
+        try:  
+            data = s3_file_upload_parser.parse_args()
+            file = data.get('file')
+            url = ''
+            if file.filename == '':
+                raise FileNotFoundError('No selected file')
+            if file and allowed_file(file.filename):
+                output = upload_file_to_s3_textract(file)
+                if output:
+                
+                    responses = []
+                    # Amazon Textract client
+                    textractmodule = boto3.client(service_name='textract',region_name='ap-south-1',
+                    aws_access_key_id=os.getenv('AWS_S3_ACCESS_KEY_ID'),
+                    aws_secret_access_key=os.getenv('AWS_S3_SECRET_ACCESS_KEY')
+                        )
+                    response = textractmodule.analyze_document(
+                    Document={
+                        'S3Object': {
+                            'Bucket': os.getenv('AWS_S3_BUCKET_NAME'),
+                            'Name': f"resume/{output}"
+                        }
+                    },
+                    FeatureTypes=["FORMS"])
+                    doc = Document(response)
+                    print ('------------- Print Form detected text ------------------------------')
+                    
+                    response_dic = {}
+                    for page in doc.pages:
+                        
+                        for field in page.form.fields:
+                            dic={}
+                            resp = ("Key: {}, Value: {}".format(field.key, field.value))
+                            dic[str(field.key)] = str(field.value)
+                            responses.append(dic)
+                    for d in responses:
+                        for key in d.keys():
+                            if 'email' in key.lower():
+                                response_dic['email'] = d[key]
+                            elif 'skill' in key.lower():
+                                response_dic['skills'] = d[key]
+                            elif 'education' in key.lower():
+                                response_dic['education'] = d[key]
+                            elif 'language' in key.lower():
+                                response_dic['languages'] = d[key]
+                    return {'created response':response_dic,
+                    'original_response' : responses}
+
+
         except Exception as e:
             import traceback
             print(e)
