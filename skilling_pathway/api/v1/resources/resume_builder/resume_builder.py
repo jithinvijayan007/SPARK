@@ -157,7 +157,7 @@ class TextractResume(API_Resource):
              #This prints the file name of the uploaded file
             resume_path = os.path.join(RESUME_DIR,resume_file.filename)
             resume_file.save(resume_path)
-            json_data = resume_parser(resume_path)
+            # json_data = resume_parser(resume_path)
 
             data = comprehend_resume_parser.parse_args()
             file = data.get('file')
