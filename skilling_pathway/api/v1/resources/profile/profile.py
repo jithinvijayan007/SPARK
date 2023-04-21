@@ -273,3 +273,13 @@ class ProfileAPI(API_Resource):
         )
 
         return {"status": True, "data": str(profile.inserted_id)}, 200
+    
+
+class ProfileResumeUpdateApi(API_Resource):    
+    @api.expect(profile_update_resume_parser)
+    @authenticate
+    def put(self, id):
+        
+        data = profile_update_resume_parser.parse_args()
+        resp = profile_resume_update(data, id)
+        return resp
