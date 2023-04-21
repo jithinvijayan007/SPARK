@@ -35,3 +35,27 @@ def course_grant_create(data,user):
         session.commit()
         print("validation error",e)
         raise ValueError(str(e.args))
+    
+def course_grant_status_update(data):
+    try:
+        id = data.get('id')
+        grant = session.query(CourseGrantMaster).filter(CourseGrantMaster.id==id).first()
+        if grant:
+            grant.status = data.get('status')
+            session.commit()
+            return {
+                'status': True,
+                'message': 'Grant status updated successfully',
+                'type': 'success'
+                }, 200
+        return {
+                "message": "Grant doesn't exist",
+                "status": False,
+                "type": "custom_error"
+            }, 400
+
+    except Exception as e:
+        session.rollback()
+        session.commit()
+        print("validation error",e)
+        raise ValueError(str(e.args))
