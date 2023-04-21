@@ -3,7 +3,7 @@ import json
 import math
 import copy
 from io import BytesIO
-from flask import send_file
+from flask import request, current_app, send_file
 import os
 from sqlite3 import ProgrammingError
 from urllib.error import HTTPError
@@ -14,8 +14,10 @@ from skilling_pathway.api.v1.decorators import authenticate
 from .parser_helper import (
     course_list_parser,
     course_by_id_parser,
-    course_content_parser
+    course_content_parser,
+    course_grant_parser
 )
+from .schema import *
 
 # from .course import (
 #    InstitutionMaster,
@@ -159,6 +161,29 @@ class CourseContentAPI(API_Resource):
                 "status": True,
                 "data": result
             }, 200
+
+
+        except Exception as e:
+            import traceback
+            print(e)
+            session.rollback()
+            session.commit()
+            return {
+                "message": str(traceback.format_exc()),
+                "status": False,
+                "type": "custom_error"
+            }, 400
+        
+
+class CourseGrantAPI(API_Resource):
+    @authenticate
+    @api.expect(course_grant_parser)
+    def post(self):
+        try:
+            data = course_grant_parser.parse_args()
+            user = request.user
+            resp = course_grant_create(data,user)
+            return resp
 
 
         except Exception as e:

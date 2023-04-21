@@ -16,3 +16,17 @@ course_content_parser = reqparse.RequestParser()
 course_content_parser.add_argument(
     'access-token',type=str,location='headers',required=True,
 )
+
+course_grant_parser = reqparse.RequestParser()
+course_grant_parser.add_argument(
+    'access-token',type=str,location='headers',required=True,
+)
+course_grant_parser.add_argument(
+    "participant_id", type=str, required=True
+)
+course_grant_parser.add_argument(
+    "course_id", type=int, required=True
+)
+course_grant_parser.add_argument(
+    "funder_id", type=str, required=False
+)
