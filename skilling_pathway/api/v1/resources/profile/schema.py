@@ -58,8 +58,6 @@ def profile_resume_update(data,id):
             # if data.get('gender'):
             #     prof.gender=data.get('gender')
             # session.commit()
-
-
             if data.get('current_skills'):
                 current_skills = data.get('current_skills').split(',')
                 new_skill = prof.current_skills
@@ -67,6 +65,8 @@ def profile_resume_update(data,id):
                     new_skill.extend(current_skills)
                 else:
                     new_skill = current_skills
+                new_skill = [*set(new_skill)]
+                prof.current_skills=None
             if data.get('other_languages'):
                 current_langs = data.get('other_languages').split(',')
                 new_langs = prof.other_languages
@@ -74,6 +74,8 @@ def profile_resume_update(data,id):
                     new_langs.extend(current_langs)
                 else:
                     new_langs = current_langs
+                new_langs = [*set(new_langs)]
+                prof.other_languages=None
             if data.get("interested_course"):
                 current_course= data.get('interested_course').split(',')
                 new_course = prof.interested_course
@@ -81,6 +83,8 @@ def profile_resume_update(data,id):
                     new_course.extend(current_course)
                 else:
                     new_course = current_course
+                new_course = [*set(new_course)]
+                prof.interested_course=None
             if data.get("educational_qualifications"):
                 current_qualifi = data.get('educational_qualifications').split(',')
                 new_qualifi = prof.educational_qualifications
@@ -88,6 +92,9 @@ def profile_resume_update(data,id):
                     new_qualifi.extend(current_qualifi)
                 else:
                     new_qualifi = current_qualifi
+                new_qualifi = [*set(new_qualifi)]
+                prof.educational_qualifications=None
+            session.commit()
 
             prof.current_skills=new_skill
             prof.other_languages=new_langs

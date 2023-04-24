@@ -282,7 +282,7 @@ class TextractPdfResume(API_Resource):
                     
                     response_dic = {'email':None,'skills':None,'education':None,'languages':None,'address':None,
                                     'mobile':None,'experience':None,'courses':None,'industry':None,'location':None,
-                                    'role':None}
+                                    'role':None,'certificate':None}
                     for page in doc.pages:
                         
                         for field in page.form.fields:
@@ -316,6 +316,8 @@ class TextractPdfResume(API_Resource):
                                 response_dic['location'] = d[key]
                             elif 'role' in key.lower():
                                 response_dic['role'] = d[key]
+                            elif 'certificate' in key.lower():
+                                response_dic['certificate'] = d[key]
                     return {'created_response':response_dic,
                     'original_response' : responses}
 
