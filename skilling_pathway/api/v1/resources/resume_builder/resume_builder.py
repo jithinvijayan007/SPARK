@@ -280,7 +280,9 @@ class TextractPdfResume(API_Resource):
                     doc = Document(response)
                     print ('------------- Print Form detected text ------------------------------')
                     
-                    response_dic = {}
+                    response_dic = {'email':None,'skills':None,'education':None,'languages':None,'address':None,
+                                    'mobile':None,'experience':None,'courses':None,'industry':None,'location':None,
+                                    'role':None}
                     for page in doc.pages:
                         
                         for field in page.form.fields:
@@ -298,6 +300,22 @@ class TextractPdfResume(API_Resource):
                                 response_dic['education'] = d[key]
                             elif 'language' in key.lower():
                                 response_dic['languages'] = d[key]
+                            elif 'dob' in key.lower():
+                                response_dic['languages'] = d[key]
+                            elif 'address' in key.lower():
+                                response_dic['address'] = d[key]
+                            elif 'mobile' in key.lower():
+                                response_dic['mobile'] = d[key]
+                            elif 'experience' in key.lower():
+                                response_dic['experience'] = d[key]
+                            elif 'course' in key.lower():
+                                response_dic['courses'] = d[key]
+                            elif 'industry' in key.lower():
+                                response_dic['industry'] = d[key]
+                            elif 'location' in key.lower():
+                                response_dic['location'] = d[key]
+                            elif 'role' in key.lower():
+                                response_dic['role'] = d[key]
                     return {'created response':response_dic,
                     'original_response' : responses}
 
