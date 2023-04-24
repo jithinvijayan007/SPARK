@@ -316,7 +316,7 @@ class TextractPdfResume(API_Resource):
                                 response_dic['location'] = d[key]
                             elif 'role' in key.lower():
                                 response_dic['role'] = d[key]
-                    return {'created response':response_dic,
+                    return {'created_response':response_dic,
                     'original_response' : responses}
 
 
