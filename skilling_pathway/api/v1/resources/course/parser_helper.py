@@ -25,7 +25,7 @@ course_grant_parser.add_argument(
     "participant_id", type=str, required=True
 )
 course_grant_parser.add_argument(
-    "course_name", type=int, required=True
+    "course_name", type=str, required=True
 )
 course_grant_parser.add_argument(
     "course_id", type=int, required=True
