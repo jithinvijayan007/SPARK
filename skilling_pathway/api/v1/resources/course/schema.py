@@ -17,8 +17,11 @@ def course_grant_create(data,user):
     try:
         course_grant=CourseGrantMaster(
                     participant_id=data.get("participant_id"),
+                    course_name=data.get("course_name"),
                     course_id=data.get("course_id"),
                     funder_id=data.get("funder_id"),
+                    course_actual_price=data.get("course_actual_price"),
+                    course_offer_price=data.get("course_offer_price"),
                     created_by=user,
                     status='requested'
                 )

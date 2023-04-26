@@ -154,9 +154,12 @@ class CourseGrantMaster(Base):
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
     participant_id = Column(UUID, nullable=False)
+    course_name = Column(String(250), nullable=True)
     course_id = Column(Integer, nullable=False)
     funder_id = Column(UUID, nullable=True)
     status = Column(String(25))
+    course_actual_price = Column(String(25), nullable=True)
+    course_offer_price = Column(String(25), nullable=True)
     is_active = Column(Boolean, default=True)
     created_by = Column(UUID(as_uuid=True))
     created_at = Column(DateTime(timezone=True), default=func.now())
