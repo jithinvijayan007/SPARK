@@ -37,7 +37,7 @@ class CourseList(API_Resource):
     def get(self):
         try:
 
-            url = "https://dev.lms.samhita.org//webservice/rest/server.php?wstoken=9b90383be92709097c2edb05a1dfa7b5&wsfunction=core_course_get_courses&moodlewsrestformat=json"
+            url = "https://dev.lms.samhita.org//webservice/rest/server.php?wstoken=ca94fadef0865bee849e51f6887320b9&wsfunction=core_course_get_courses&moodlewsrestformat=json"
 
             payload={}
             headers = {}
@@ -75,7 +75,7 @@ class CourseByID(API_Resource):
     @api.expect(course_by_id_parser)
     def get(self, id):
         try:
-            url = f"https://dev.lms.samhita.org//webservice/rest/server.php?wstoken=9b90383be92709097c2edb05a1dfa7b5&wsfunction=core_course_get_courses&moodlewsrestformat=json&options[ids][0]={id}"
+            url = f"https://dev.lms.samhita.org//webservice/rest/server.php?wstoken=ca94fadef0865bee849e51f6887320b9&wsfunction=core_course_get_courses&moodlewsrestformat=json&options[ids][0]={id}"
 
             payload={}
             headers = {}
@@ -110,7 +110,7 @@ class CourseListNew(API_Resource):
     def get(self):
         try:
 
-            url = "https://dev.lms.samhita.org//webservice/rest/server.php?wstoken=9b90383be92709097c2edb05a1dfa7b5&wsfunction=core_course_get_courses_by_field&moodlewsrestformat=json"
+            url = "https://dev.lms.samhita.org//webservice/rest/server.php?wstoken=ca94fadef0865bee849e51f6887320b9&wsfunction=core_course_get_courses_by_field&moodlewsrestformat=json"
 
             payload={}
             headers = {}
@@ -148,7 +148,7 @@ class CourseContentAPI(API_Resource):
     @api.expect(course_content_parser)
     def get(self, id):
         try:
-            url = f"https://dev.lms.samhita.org//webservice/rest/server.php?wstoken=9b90383be92709097c2edb05a1dfa7b5&wsfunction=core_course_get_contents&moodlewsrestformat=json&courseid={id}"
+            url = f"https://dev.lms.samhita.org//webservice/rest/server.php?wstoken=ca94fadef0865bee849e51f6887320b9&wsfunction=core_course_get_contents&moodlewsrestformat=json&courseid={id}"
 
             payload={}
             headers = {}
