@@ -111,6 +111,11 @@ def profile_resume_update(data,id):
                     "status": True,
                     "data": {}
                 }, 200
+        return {
+                    "message": "Profile not found ",
+                    "status": False,
+                    "data": {}
+                }, 400
 
     except Exception as e:
         session.rollback()
