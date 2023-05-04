@@ -67,6 +67,8 @@ def profile_resume_update(data,id):
                     new_skill = current_skills
                 new_skill = [*set(new_skill)]
                 prof.current_skills=None
+            else:
+                new_skill = None
             if data.get('other_languages'):
                 current_langs = data.get('other_languages').split(',')
                 new_langs = prof.other_languages
@@ -76,6 +78,8 @@ def profile_resume_update(data,id):
                     new_langs = current_langs
                 new_langs = [*set(new_langs)]
                 prof.other_languages=None
+            else:
+                new_langs = None
             if data.get("interested_course"):
                 current_course= data.get('interested_course').split(',')
                 new_course = prof.interested_course
@@ -85,6 +89,8 @@ def profile_resume_update(data,id):
                     new_course = current_course
                 new_course = [*set(new_course)]
                 prof.interested_course=None
+            else:
+                new_course = None
             if data.get("educational_qualifications"):
                 current_qualifi = data.get('educational_qualifications').split(',')
                 new_qualifi = prof.educational_qualifications
@@ -94,6 +100,8 @@ def profile_resume_update(data,id):
                     new_qualifi = current_qualifi
                 new_qualifi = [*set(new_qualifi)]
                 prof.educational_qualifications=None
+            else:
+                new_qualifi = None
             session.commit()
 
             prof.current_skills=new_skill
