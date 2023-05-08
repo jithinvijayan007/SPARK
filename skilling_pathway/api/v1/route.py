@@ -7,7 +7,7 @@ from skilling_pathway.api.v1.resources.course.course import (
 from skilling_pathway.api.v1.resources.resume_builder.resume_builder import (ResumeBuilderAPI,
                                                                              UploadResume, ComprehentResume, TextractResume,
                                                                              TextractPdfResume)
-from skilling_pathway.api.v1.resources.course.course import CourseList,CourseByID,CourseGrantAPI,CourseGrantDashboardAPI
+from skilling_pathway.api.v1.resources.course.course import CourseList,CourseByID,CourseGrantAPI,CourseGrantDashboardAPI,CoursesByCategoryAPI
 from skilling_pathway.api.v1.resources.profile.profile import ProfileCreateUpdateAPI,ProfileGetAPI,ProfileAPI,ProfileResumeUpdateApi
 
 
@@ -21,6 +21,7 @@ v1_api.add_resource(CourseListNew,'/course/list/new/')
 v1_api.add_resource(CourseContentAPI,'/course_content/<id>/')
 v1_api.add_resource(CourseGrantAPI,'/course/grant/')
 v1_api.add_resource(CourseGrantDashboardAPI,'/course/grant/dashboard')
+v1_api.add_resource(CoursesByCategoryAPI,'/courses/list/by_category/')
 
 
 # profile api's

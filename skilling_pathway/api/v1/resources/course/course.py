@@ -251,4 +251,44 @@ class CourseGrantDashboardAPI(API_Resource):
             }, 400
         
 
+class CoursesByCategoryAPI(API_Resource):
+    @authenticate
+    @api.expect(course_content_parser)
+    def get(self):
+        try:
+            url = "https://dev.lms.samhita.org//webservice/rest/server.php?wstoken=ca94fadef0865bee849e51f6887320b9&wsfunction=core_course_get_courses_by_field&moodlewsrestformat=json"
+
+            payload = 'field=category&value=7'
+            headers = {
+            'Content-Type': 'application/x-www-form-urlencoded'
+            }
+            response = requests.request("POST", url, headers=headers, data=payload)
+            if response.status_code in (range(200,299)):
+                result = response.json()
+
+                return {
+                "message": "Courses fetched succefully",
+                "status": True,
+                "data": result
+                }, 200
+            else:
+                return {
+                "message": response.reason,
+                "status": False,
+                "data": response.reason
+                }, response.status_code            
+
+
+        except Exception as e:
+            import traceback
+            print(e)
+            session.rollback()
+            session.commit()
+            return {
+                "message": str(traceback.format_exc()),
+                "status": False,
+                "type": "custom_error"
+            }, 400
+        
+
 
