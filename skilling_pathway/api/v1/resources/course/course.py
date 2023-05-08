@@ -86,11 +86,19 @@ class CourseByID(API_Resource):
             result = response.json()
 
 
-            return {
+            if response.status_code in (range(200,299)):
+                result = response.json()
+                return {
                 "message": "Courses details fetched succefully",
                 "status": True,
                 "data": result
-            }, 200
+                }, response.status_code
+            else:
+                return {
+                "message": response.reason,
+                "status": False,
+                "data": response.reason
+                }, response.status_code
 
 
         except Exception as e:
@@ -109,7 +117,6 @@ class CourseListNew(API_Resource):
     @api.expect(course_list_parser)
     def get(self):
         try:
-
             url = "https://dev.lms.samhita.org//webservice/rest/server.php?wstoken=ca94fadef0865bee849e51f6887320b9&wsfunction=core_course_get_courses_by_field&moodlewsrestformat=json"
 
             payload={}
@@ -122,7 +129,7 @@ class CourseListNew(API_Resource):
                 "message": "Courses fetched succefully",
                 "status": True,
                 "data": result
-                }, 200
+                }, response.status_code
             else:
                 return {
                 "message": response.reason,
@@ -159,11 +166,19 @@ class CourseContentAPI(API_Resource):
             result = response.json()
 
 
-            return {
+            if response.status_code in (range(200,299)):
+                result = response.json()
+                return {
                 "message": "Courses details fetched succefully",
                 "status": True,
                 "data": result
-            }, 200
+                }, response.status_code
+            else:
+                return {
+                "message": response.reason,
+                "status": False,
+                "data": response.reason
+                }, response.status_code
 
 
         except Exception as e:
