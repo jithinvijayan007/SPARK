@@ -290,8 +290,6 @@ class ProfileStatusUpdateAPI(API_Resource):
     @authenticate
     def put(self, id):
         
-        data = profile_update_parser.parse_args()
-        id = data.get('profile_id')
         profile = session.query(ParticipantProfile).filter(ParticipantProfile.id==id).first()
         if profile:
             profile.resume_added = True

@@ -29,7 +29,7 @@ v1_api.add_resource(ProfileCreateUpdateAPI, '/profile/create_update/')
 v1_api.add_resource(ProfileGetAPI, '/profile/<participant_id>/')
 v1_api.add_resource(ProfileAPI, '/profile/')
 v1_api.add_resource(ProfileResumeUpdateApi, '/profile/update/resume/<id>/')
-v1_api.add_resource(ProfileStatusUpdateAPI, '/profile/status_update/')
+v1_api.add_resource(ProfileStatusUpdateAPI, '/profile/status_update/<profile_id>/')
 
 v1_api.add_resource(ResumeBuilderAPI,'/resume-builder/')
 v1_api.add_resource(UploadResume,'/resume-upload/')
