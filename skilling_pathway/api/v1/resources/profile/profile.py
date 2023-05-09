@@ -288,9 +288,8 @@ class ProfileResumeUpdateApi(API_Resource):
 class ProfileStatusUpdateAPI(API_Resource):    
     @api.expect(profile_update_parser)
     @authenticate
-    def put(self, id):
-        
-        profile = session.query(ParticipantProfile).filter(ParticipantProfile.id==id).first()
+    def put(self, profile_id):
+        profile = session.query(ParticipantProfile).filter(ParticipantProfile.id==profile_id).first()
         if profile:
             profile.resume_added = True
             session.commit()
