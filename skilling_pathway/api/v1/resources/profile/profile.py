@@ -283,3 +283,26 @@ class ProfileResumeUpdateApi(API_Resource):
         data = profile_update_resume_parser.parse_args()
         resp = profile_resume_update(data, id)
         return resp
+    
+
+class ProfileStatusUpdateAPI(API_Resource):    
+    @api.expect(profile_update_parser)
+    @authenticate
+    def put(self, id):
+        
+        data = profile_update_parser.parse_args()
+        id = data.get('profile_id')
+        profile = session.query(ParticipantProfile).filter(ParticipantProfile.id==id).first()
+        if profile:
+            profile.resume_added = True
+            session.commit()
+            return {
+                    "message": "success",
+                    "status": True,
+                    "data": {}
+                }, 200
+        return {
+                    "message": "profile not found",
+                    "status": False,
+                    "data": {}
+                }, 400

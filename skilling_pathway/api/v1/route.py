@@ -8,7 +8,7 @@ from skilling_pathway.api.v1.resources.resume_builder.resume_builder import (Res
                                                                              UploadResume, ComprehentResume, TextractResume,
                                                                              TextractPdfResume)
 from skilling_pathway.api.v1.resources.course.course import CourseList,CourseByID,CourseGrantAPI,CourseGrantDashboardAPI,CoursesByCategoryAPI
-from skilling_pathway.api.v1.resources.profile.profile import ProfileCreateUpdateAPI,ProfileGetAPI,ProfileAPI,ProfileResumeUpdateApi
+from skilling_pathway.api.v1.resources.profile.profile import ProfileCreateUpdateAPI,ProfileGetAPI,ProfileAPI,ProfileResumeUpdateApi,ProfileStatusUpdateAPI
 
 
 v1_blueprint = Blueprint(name="v1", import_name=__name__)
@@ -29,6 +29,7 @@ v1_api.add_resource(ProfileCreateUpdateAPI, '/profile/create_update/')
 v1_api.add_resource(ProfileGetAPI, '/profile/<participant_id>/')
 v1_api.add_resource(ProfileAPI, '/profile/')
 v1_api.add_resource(ProfileResumeUpdateApi, '/profile/update/resume/<id>/')
+v1_api.add_resource(ProfileStatusUpdateAPI, '/profile/status_update/')
 
 v1_api.add_resource(ResumeBuilderAPI,'/resume-builder/')
 v1_api.add_resource(UploadResume,'/resume-upload/')
