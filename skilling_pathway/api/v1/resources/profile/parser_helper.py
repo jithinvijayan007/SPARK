@@ -35,6 +35,3 @@ profile_update_parser = reqparse.RequestParser()
 profile_update_parser.add_argument(
     'access-token',type=str,location='headers',required=True,
 )
-profile_update_parser.add_argument(
-    "profile_id", type=str, required=True
-)
