@@ -68,7 +68,7 @@ def profile_resume_update(data,id):
                 new_skill = [*set(new_skill)]
                 prof.current_skills=None
             else:
-                new_skill = None
+                new_skill = prof.current_skills
             if data.get('other_languages'):
                 current_langs = data.get('other_languages').split(',')
                 new_langs = prof.other_languages
@@ -79,7 +79,7 @@ def profile_resume_update(data,id):
                 new_langs = [*set(new_langs)]
                 prof.other_languages=None
             else:
-                new_langs = None
+                new_langs = prof.other_languages
             if data.get("interested_course"):
                 current_course= data.get('interested_course').split(',')
                 new_course = prof.interested_course
@@ -90,7 +90,7 @@ def profile_resume_update(data,id):
                 new_course = [*set(new_course)]
                 prof.interested_course=None
             else:
-                new_course = None
+                new_course = prof.interested_course
             if data.get("educational_qualifications"):
                 current_qualifi = data.get('educational_qualifications').split(',')
                 new_qualifi = prof.educational_qualifications
@@ -101,7 +101,7 @@ def profile_resume_update(data,id):
                 new_qualifi = [*set(new_qualifi)]
                 prof.educational_qualifications=None
             else:
-                new_qualifi = None
+                new_qualifi = prof.educational_qualifications
             session.commit()
 
             prof.current_skills=new_skill
@@ -112,6 +112,7 @@ def profile_resume_update(data,id):
             prof.email=data.get('email')
             prof.mobile=data.get('mobile')
             prof.gender=data.get('gender')
+            prof.resume_added = True
             session.commit()
 
             return {
