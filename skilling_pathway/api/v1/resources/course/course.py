@@ -271,6 +271,7 @@ class CoursesByCategoryAPI(API_Resource):
     @api.expect(course_content_parser)
     def get(self):
         try:
+            data = course_content_parser.parse_args()
             url = "https://dev.lms.samhita.org//webservice/rest/server.php?wstoken=ca94fadef0865bee849e51f6887320b9&wsfunction=core_course_get_courses_by_field&moodlewsrestformat=json"
 
             payload = 'field=category&value=7'
@@ -278,7 +279,23 @@ class CoursesByCategoryAPI(API_Resource):
             'Content-Type': 'application/x-www-form-urlencoded'
             }
             response = requests.request("POST", url, headers=headers, data=payload)
-            if response.status_code in (range(200,299)):
+            if data.get('search') and response.status_code in (range(200,299)):
+                new_list = []
+                result_response = response.json()
+                courses = result_response.get('courses')
+                if courses:
+                    for i in courses:
+                        if i.get('fullname'):
+                            course_name = i.get('fullname')
+                            if data.get('search').lower() in course_name.lower():
+                                new_list.append(i)
+                    return {
+                    "message": "Courses fetched succefully",
+                    "status": True,
+                    "data": {'courses':new_list}
+                    }, 200
+
+            elif response.status_code in (range(200,299)):
                 result = response.json()
 
                 return {

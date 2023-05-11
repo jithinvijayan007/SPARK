@@ -16,6 +16,9 @@ course_content_parser = reqparse.RequestParser()
 course_content_parser.add_argument(
     'access-token',type=str,location='headers',required=True,
 )
+course_content_parser.add_argument(
+    "search", type=str, required=False
+)
 
 course_grant_parser = reqparse.RequestParser()
 course_grant_parser.add_argument(
