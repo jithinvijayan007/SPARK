@@ -17,47 +17,7 @@ def profile_resume_update(data,id):
     try:
         prof = session.query(ParticipantProfile).filter(ParticipantProfile.id==id).first()
         if prof:
-            # if data.get('current_skills'):
-            #     current_skills = data.get('current_skills').split(',')
-            #     new_list = prof.current_skills
-            #     if new_list:
-            #         new_list.extend(current_skills)
-            #         prof.current_skills=new_list
-            #     else:
-            #         prof.current_skills = current_skills
-            # if data.get('other_languages'):
-            #     current_skills = data.get('other_languages').split(',')
-            #     new_list = prof.other_languages
-            #     if new_list:
-            #         new_list.extend(current_skills)
-            #         prof.other_languages = new_list
-            #     else:
-            #         prof.other_languages = current_skills
-            # if data.get("interested_course"):
-            #     current_skills = data.get('interested_course').split(',')
-            #     new_list = prof.interested_course
-            #     if new_list:
-            #         new_list.extend(current_skills)
-            #         prof.interested_course = new_list
-            #     else:
-            #         prof.interested_course = current_skills
-            # if data.get("educational_qualifications"):
-            #     current_skills = data.get('educational_qualifications').split(',')
-            #     new_list = prof.educational_qualifications
-            #     if new_list:
-            #         new_list.extend(current_skills)
-            #         prof.educational_qualifications = new_list
-            #     else:
-            #         prof.educational_qualifications = current_skills
-            # if data.get('address'):
-            #     prof.address=data.get('address')
-            # if data.get('email'):
-            #     prof.email=data.get('email')
-            # if data.get('mobile'):
-            #     prof.mobile=data.get('mobile')
-            # if data.get('gender'):
-            #     prof.gender=data.get('gender')
-            # session.commit()
+            
             if data.get('current_skills'):
                 current_skills = data.get('current_skills').split(',')
                 new_skill = prof.current_skills
@@ -102,6 +62,17 @@ def profile_resume_update(data,id):
                 prof.educational_qualifications=None
             else:
                 new_qualifi = prof.educational_qualifications
+            if data.get("experience"):
+                current_experience = data.get('experience').split(',')
+                new_experience = prof.experience
+                if new_experience:
+                    new_experience.extend(current_experience)
+                else:
+                    new_experience = current_qualifi
+                new_experience = [*set(new_experience)]
+                prof.experience=None
+            else:
+                new_experience = prof.experience
             session.commit()
 
             prof.current_skills=new_skill

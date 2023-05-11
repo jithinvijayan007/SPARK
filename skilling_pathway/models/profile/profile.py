@@ -53,6 +53,7 @@ class ParticipantProfile(Base):
     address = Column(String, nullable=True)
     certificates = Column(ARRAY(String), nullable=True)
     educational_qualifications = Column(ARRAY(String), nullable=True)
+    experience = Column(ARRAY(String), nullable=True)
     resume_added = Column(Boolean, nullable=True, default=False)
 
     profile_scores = relationship("ProfileScore", back_populates="participant_profile")

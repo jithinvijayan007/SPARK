@@ -30,6 +30,7 @@ profile_update_resume_parser.add_argument('email',type=str,location='json')
 profile_update_resume_parser.add_argument('mobile',type=str,location='json')
 profile_update_resume_parser.add_argument('gender',choices=('male','female','others'),type=str,location='json')
 profile_update_resume_parser.add_argument('certificates',type=str,location='json')
+profile_update_resume_parser.add_argument('experience',type=str,location='json')
 
 profile_update_parser = reqparse.RequestParser()
 profile_update_parser.add_argument(
