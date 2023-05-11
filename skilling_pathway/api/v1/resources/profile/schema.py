@@ -17,7 +17,6 @@ def profile_resume_update(data,id):
     try:
         prof = session.query(ParticipantProfile).filter(ParticipantProfile.id==id).first()
         if prof:
-            
             if data.get('current_skills'):
                 current_skills = data.get('current_skills').split(',')
                 new_skill = prof.current_skills
@@ -68,7 +67,7 @@ def profile_resume_update(data,id):
                 if new_experience:
                     new_experience.extend(current_experience)
                 else:
-                    new_experience = current_qualifi
+                    new_experience = current_experience
                 new_experience = [*set(new_experience)]
                 prof.experience=None
             else:
@@ -84,6 +83,7 @@ def profile_resume_update(data,id):
             prof.mobile=data.get('mobile')
             prof.gender=data.get('gender')
             prof.resume_added = True
+            prof.experience = new_experience
             session.commit()
 
             return {
