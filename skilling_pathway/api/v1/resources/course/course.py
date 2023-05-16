@@ -91,7 +91,7 @@ class CourseByID(API_Resource):
 
             url = "https://dev.lms.samhita.org/webservice/rest/server.php?wstoken=ca94fadef0865bee849e51f6887320b9&wsfunction=core_course_get_courses_by_field&moodlewsrestformat=json"
 
-            payload = 'field=id&value=16'
+            payload = f"field=id&value={id}"
             headers = {
             'Content-Type': 'application/x-www-form-urlencoded'
             }
