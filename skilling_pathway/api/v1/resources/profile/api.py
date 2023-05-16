@@ -10,7 +10,7 @@ api = NameSpace("tags")
 
 class GetCertificate(API_Resource):
     @api.expect(certificate_post_parser)
-    def post(self):
+    def get(self):
         data = certificate_post_parser.parse_args()
         user = data.get('user_name')
         result = GetCertificateForParticipant(user).get_certificate_for_participant()
