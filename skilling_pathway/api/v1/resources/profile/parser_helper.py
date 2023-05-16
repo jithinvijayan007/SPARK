@@ -36,3 +36,9 @@ profile_update_parser = reqparse.RequestParser()
 profile_update_parser.add_argument(
     'access-token',type=str,location='headers',required=True,
 )
+
+
+certificate_post_parser = reqparse.RequestParser()
+certificate_post_parser.add_argument(
+    "user_name", type=str, required=True
+)

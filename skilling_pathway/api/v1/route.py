@@ -9,7 +9,7 @@ from skilling_pathway.api.v1.resources.resume_builder.resume_builder import (Res
                                                                              TextractPdfResume)
 from skilling_pathway.api.v1.resources.course.course import CourseList,CourseByID,CourseGrantAPI,CourseGrantDashboardAPI,CoursesByCategoryAPI
 from skilling_pathway.api.v1.resources.profile.profile import ProfileCreateUpdateAPI,ProfileGetAPI,ProfileAPI,ProfileResumeUpdateApi,ProfileStatusUpdateAPI
-
+from skilling_pathway.api.v1.resources.profile.api import GetCertificate,GetCourseTags
 
 v1_blueprint = Blueprint(name="v1", import_name=__name__)
 v1_api = Api(app=v1_blueprint, prefix="/",doc='/apidocs/')
@@ -22,6 +22,8 @@ v1_api.add_resource(CourseContentAPI,'/course_content/<id>/')
 v1_api.add_resource(CourseGrantAPI,'/course/grant/')
 v1_api.add_resource(CourseGrantDashboardAPI,'/course/grant/dashboard')
 v1_api.add_resource(CoursesByCategoryAPI,'/courses/list/by_category/')
+v1_api.add_resource(GetCertificate,'/get_certificate/')
+v1_api.add_resource(GetCourseTags,'/get_course_tags')
 
 
 # profile api's
