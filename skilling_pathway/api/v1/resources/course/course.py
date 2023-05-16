@@ -79,19 +79,36 @@ class CourseByID(API_Resource):
     @api.expect(course_by_id_parser)
     def get(self, id):
         try:
-            url = f"https://dev.lms.samhita.org//webservice/rest/server.php?wstoken=ca94fadef0865bee849e51f6887320b9&wsfunction=core_course_get_courses&moodlewsrestformat=json&options[ids][0]={id}"
+            # url = f"https://dev.lms.samhita.org//webservice/rest/server.php?wstoken=ca94fadef0865bee849e51f6887320b9&wsfunction=core_course_get_courses&moodlewsrestformat=json&options[ids][0]={id}"
 
-            payload={}
-            headers = {}
+            # payload={}
+            # headers = {}
 
-            response = requests.request("GET", url, headers=headers, data=payload)
+            # response = requests.request("GET", url, headers=headers, data=payload)
 
 
+            # result = response.json()
+
+            url = "https://dev.lms.samhita.org/webservice/rest/server.php?wstoken=ca94fadef0865bee849e51f6887320b9&wsfunction=core_course_get_courses_by_field&moodlewsrestformat=json"
+
+            payload = 'field=id&value=16'
+            headers = {
+            'Content-Type': 'application/x-www-form-urlencoded'
+            }
+
+            response = requests.request("POST", url, headers=headers, data=payload)
             result = response.json()
 
-
             if response.status_code in (range(200,299)):
-                result = response.json()
+                courses = result.get('courses')
+                if courses:
+                    for course in courses:
+                        if course.get('overviewfiles'):
+                            for i in course.get('overviewfiles'):
+                                if i.get('fileurl'):
+                                    image_url = i.get('fileurl')
+                                    image = f"{image_url}{sign}{wstoken}"
+                                    course['image'] = image
                 return {
                 "message": "Courses details fetched succefully",
                 "status": True,

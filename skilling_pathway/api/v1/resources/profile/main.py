@@ -21,16 +21,18 @@ class GetCertificateForParticipant():
     def get_certificate_for_participant(self):
         cursor = conn.cursor()
         course_name = "name"
-        query = f"SELECT mu.email,mc.{course_name} FROM public.mdl_customcert_issues mci " \
+        course_full_name = "fullname"
+        query = f"SELECT mu.email,mc.{course_name},mco.{course_full_name} FROM public.mdl_customcert_issues mci " \
                 f"LEFT JOIN public.mdl_user mu ON mci.userid = mu.id " \
-                f"LEFT JOIN public.mdl_customcert mc ON mci.customcertid = mc.id WHERE mu.username = %s"
+                f"LEFT JOIN public.mdl_customcert mc ON mci.customcertid = mc.id " \
+                f"LEFT JOIN public.mdl_course mco ON mc.course = mco.id WHERE mu.username = %s"
 
         cursor.execute(query, (self.user,))
         records = cursor.fetchall()
 
         response = []
         for record in records:
-            response.append({"email": record[0], "name": record[1]})
+            response.append({"email": record[0], "certificate_name": record[1],"course_name":record[2]})
 
         serialized_data = json.dumps(response)
         return serialized_data
