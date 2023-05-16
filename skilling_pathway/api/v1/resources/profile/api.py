@@ -14,7 +14,12 @@ class GetCertificate(API_Resource):
         data = certificate_post_parser.parse_args()
         user = data.get('user_name')
         result = GetCertificateForParticipant(user).get_certificate_for_participant()
-        return jsonify(json.loads(result))
+        data = json.loads(result)
+        return {
+                    "message": "success",
+                    "status": True,
+                    "data": data
+                }, 200
 
 
 class GetCourseTags(API_Resource):

@@ -30,6 +30,10 @@ from .schema import *
 #    ModuleContentMaster
 # )
 from skilling_pathway.api.v1.resources.Resource import API_Resource, NameSpace
+
+wstoken='token=ca94fadef0865bee849e51f6887320b9'
+sign='?'
+
 api = NameSpace('Course')
 class CourseList(API_Resource):
     @authenticate
@@ -278,8 +282,6 @@ class CoursesByCategoryAPI(API_Resource):
             headers = {
             'Content-Type': 'application/x-www-form-urlencoded'
             }
-            wstoken='token=ca94fadef0865bee849e51f6887320b9'
-            sign='?'
             response = requests.request("POST", url, headers=headers, data=payload)
             if data.get('search') and response.status_code in (range(200,299)):
                 new_list = []
