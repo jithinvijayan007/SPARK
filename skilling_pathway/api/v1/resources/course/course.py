@@ -278,6 +278,8 @@ class CoursesByCategoryAPI(API_Resource):
             headers = {
             'Content-Type': 'application/x-www-form-urlencoded'
             }
+            wstoken='token=ca94fadef0865bee849e51f6887320b9'
+            sign='?'
             response = requests.request("POST", url, headers=headers, data=payload)
             if data.get('search') and response.status_code in (range(200,299)):
                 new_list = []
@@ -289,6 +291,14 @@ class CoursesByCategoryAPI(API_Resource):
                             course_name = i.get('fullname')
                             if data.get('search').lower() in course_name.lower():
                                 new_list.append(i)
+                    for i in new_list:
+                        if i.get('overviewfiles'):
+                            for j in i.get('overviewfiles'):
+                                if j.get('fileurl'):
+                                    image_url = j.get('fileurl')
+                                    image = f"{image_url}{sign}{wstoken}"
+                                    i['image'] = image
+
                     return {
                     "message": "Courses fetched succefully",
                     "status": True,
@@ -297,7 +307,17 @@ class CoursesByCategoryAPI(API_Resource):
 
             elif response.status_code in (range(200,299)):
                 result = response.json()
-
+                courses = result.get('courses')
+                if courses:
+                    for course in courses:
+                        if course.get('overviewfiles'):
+                            for i in course.get('overviewfiles'):
+                                if i.get('fileurl'):
+                                    image_url = i.get('fileurl')
+                                    image = f"{image_url}{sign}{wstoken}"
+                                    course['image'] = image
+                result = {'courses':courses}
+                
                 return {
                 "message": "Courses fetched succefully",
                 "status": True,
