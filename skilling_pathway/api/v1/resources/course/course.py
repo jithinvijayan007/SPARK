@@ -283,16 +283,33 @@ class CoursesByCategoryAPI(API_Resource):
             'Content-Type': 'application/x-www-form-urlencoded'
             }
             response = requests.request("POST", url, headers=headers, data=payload)
+
+            url = "https://samhita-skilling-pathway.pacewisdom.in/v1/get_course_tags"
+
+            payload = {}
+            headers = {
+            'accept': 'application/json'
+            }
+            
+            tag_response = requests.request("GET", url, headers=headers, data=payload)
+            tag_response_data = tag_response.json()
+
             if data.get('search') and response.status_code in (range(200,299)):
                 new_list = []
                 result_response = response.json()
                 courses = result_response.get('courses')
                 if courses:
                     for i in courses:
+                        tag_list = []
                         if i.get('fullname'):
                             course_name = i.get('fullname')
                             if data.get('search').lower() in course_name.lower():
                                 new_list.append(i)
+                                for tag in tag_response_data:
+                                    if tag['course'] == i.get('fullname'):
+                                        tag_list.append(tag['tag'])
+                                i['tag_names'] = tag_list
+                                
                     for i in new_list:
                         if i.get('overviewfiles'):
                             for j in i.get('overviewfiles'):
@@ -312,12 +329,18 @@ class CoursesByCategoryAPI(API_Resource):
                 courses = result.get('courses')
                 if courses:
                     for course in courses:
+                        tag_list = []
                         if course.get('overviewfiles'):
                             for i in course.get('overviewfiles'):
                                 if i.get('fileurl'):
                                     image_url = i.get('fileurl')
                                     image = f"{image_url}{sign}{wstoken}"
                                     course['image'] = image
+                        for tag in tag_response_data:
+                            if tag['course'] == course.get('fullname'):
+                                tag_list.append(tag['tag'])
+                        course['tag_names'] = tag_list
+
                 result = {'courses':courses}
                 
                 return {
