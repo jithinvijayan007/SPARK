@@ -99,16 +99,31 @@ class CourseByID(API_Resource):
             response = requests.request("POST", url, headers=headers, data=payload)
             result = response.json()
 
+            url = "https://samhita-skilling-pathway.pacewisdom.in/v1/get_course_tags"
+
+            payload = {}
+            headers = {
+            'accept': 'application/json'
+            }
+            
+            tag_response = requests.request("GET", url, headers=headers, data=payload)
+            tag_response_data = tag_response.json()
+
             if response.status_code in (range(200,299)):
                 courses = result.get('courses')
                 if courses:
                     for course in courses:
+                        tag_list = []
                         if course.get('overviewfiles'):
                             for i in course.get('overviewfiles'):
                                 if i.get('fileurl'):
                                     image_url = i.get('fileurl')
                                     image = f"{image_url}{sign}{wstoken}"
                                     course['image'] = image
+                        for tag in tag_response_data:
+                            if tag['course'] == course.get('fullname'):
+                                tag_list.append(tag['tag'])
+                        course['tag_names'] = tag_list
                 return {
                 "message": "Courses details fetched succefully",
                 "status": True,
