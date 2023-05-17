@@ -252,10 +252,9 @@ class CourseGrantAPI(API_Resource):
                 "type": "custom_error"
             }, 400
         
-class CourseGrantCheckAPI(API_Resource):
     @authenticate
     @api.expect(course_grant_check_parser)
-    def post(self):
+    def get(self):
         try:
             data = course_grant_check_parser.parse_args()
             resp = course_grant_check(data)
@@ -271,8 +270,7 @@ class CourseGrantCheckAPI(API_Resource):
                 "message": str(traceback.format_exc()),
                 "status": False,
                 "type": "custom_error"
-            }, 400
-        
+            }, 400        
 
 
 class CourseGrantDashboardAPI(API_Resource):
