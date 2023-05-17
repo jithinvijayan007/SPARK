@@ -6,8 +6,24 @@ before_script:
   - echo "Runner started"
 
 stages:
+  - Test
   - devBuild
   - devDeploy
+
+Sonarqube-Check:
+  variables:
+    GIT_DEPTH: 0
+  stage: Test
+  script: 
+    - docker run --rm  --volume "$PWD:/usr/src" sonarsource/sonar-scanner-cli sonar-scanner -Dsonar.projectKey=$SONAR_TOKEN  -Dsonar.sources=. -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_TOKEN -D sonar.projectName=$CI_PROJECT_NAME -Dsonar.qualitygate.wait=true -Dsonar.branch.name=$CI_COMMIT_REF_NAME -Dsonar.language=py
+    - sudo rm -rf ./.scannerwork
+  after_script:
+    - sudo rm -rf ./.scannerwork
+  allow_failure: true
+  only:
+    - dev
+  tags:
+   - samhita-sonarqube
 
 
 devBuild:
