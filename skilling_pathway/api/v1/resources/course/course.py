@@ -340,7 +340,35 @@ class CoursesByCategoryAPI(API_Resource):
                     "status": True,
                     "data": {'courses':new_list}
                     }, 200
-
+                
+            if data.get('tag') and response.status_code in (range(200,299)):
+                new_list = []
+                result = response.json()
+                courses = result.get('courses')
+                if courses:
+                    for course in courses:
+                        tag_list = []
+                        if course.get('overviewfiles'):
+                            for i in course.get('overviewfiles'):
+                                if i.get('fileurl'):
+                                    image_url = i.get('fileurl')
+                                    image = f"{image_url}{sign}{wstoken}"
+                                    course['image'] = image
+                        for tag in tag_response_data:
+                            if tag['course'] == course.get('fullname'):
+                                tag_list.append(tag['tag'])
+                        course['tag_names'] = tag_list
+                    
+                    for course in courses:
+                        if data.get('tag') in course['tag_names']:
+                            new_list.append(course)
+                    
+                    return {
+                    "message": "Courses fetched succefully",
+                    "status": True,
+                    "data": {'courses':new_list}
+                    }, 200
+                
             elif response.status_code in (range(200,299)):
                 result = response.json()
                 courses = result.get('courses')
