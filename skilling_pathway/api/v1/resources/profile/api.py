@@ -25,6 +25,22 @@ class GetCertificate(API_Resource):
 class GetCourseTags(API_Resource):
     def get(self):
         result = GetCousreTags().get_course_tags()
-        return jsonify(json.loads(result))
+        return jsonify(json.loads(result))    
+
+class CourseTagsList(API_Resource):
+    def get(self):
+        tag_lists = []
+        result = GetCousreTags().get_course_tags()
+        data = json.loads(result)
+        for i in data:
+            tag = i.get('tag')
+            if tag:
+                tag_lists.append(tag)
+        tag_list = [*set(tag_lists)]
+        return {
+                    "message": "success",
+                    "status": True,
+                    "data": tag_list
+                }, 200
 
 
