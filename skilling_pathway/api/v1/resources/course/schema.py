@@ -2,6 +2,7 @@ from http.client import HTTPException
 import json
 import math
 import copy
+from sqlalchemy import or_, and_
 from io import BytesIO
 from flask import request, current_app, send_file
 import os
@@ -38,6 +39,20 @@ def course_grant_create(data,user):
         session.commit()
         print("validation error",e)
         raise ValueError(str(e.args))
+    
+def course_grant_check(data):
+    try:
+        grant = session.query(CourseGrantMaster).filter(and_(CourseGrantMaster.participant_id==data.get('participant_id'),\
+                                                    CourseGrantMaster.course_id==data.get('course_id'))).first()
+        if grant:
+            return {'exist':True}
+        return {'exist':False}
+    except Exception as e:
+        session.rollback()
+        session.commit()
+        print("validation error",e)
+        raise ValueError(str(e.args))
+
     
 def course_grant_status_update(data):
     try:

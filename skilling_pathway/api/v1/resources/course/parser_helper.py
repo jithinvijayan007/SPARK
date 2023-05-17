@@ -61,3 +61,14 @@ course_grant_dashboard_get_parser = reqparse.RequestParser()
 course_grant_dashboard_get_parser.add_argument(
     'access-token',type=str,location='headers',required=True,
 )
+
+course_grant_check_parser = reqparse.RequestParser()
+course_grant_check_parser.add_argument(
+    'access-token',type=str,location='headers',required=True,
+)
+course_grant_check_parser.add_argument(
+    "participant_id", type=str, required=True
+)
+course_grant_check_parser.add_argument(
+    "course_id", type=int, required=True
+)

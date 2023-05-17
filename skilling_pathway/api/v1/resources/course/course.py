@@ -18,7 +18,8 @@ from .parser_helper import (
     course_content_parser,
     course_grant_parser,
     course_grant_dashboard_parser,
-    course_grant_dashboard_get_parser
+    course_grant_dashboard_get_parser,
+    course_grant_check_parser
 )
 from .schema import *
 
@@ -237,6 +238,27 @@ class CourseGrantAPI(API_Resource):
             data = course_grant_parser.parse_args()
             user = request.user
             resp = course_grant_create(data,user)
+            return resp
+
+
+        except Exception as e:
+            import traceback
+            print(e)
+            session.rollback()
+            session.commit()
+            return {
+                "message": str(traceback.format_exc()),
+                "status": False,
+                "type": "custom_error"
+            }, 400
+        
+class CourseGrantCheckAPI(API_Resource):
+    @authenticate
+    @api.expect(course_grant_check_parser)
+    def post(self):
+        try:
+            data = course_grant_check_parser.parse_args()
+            resp = course_grant_check(data)
             return resp
 
 
