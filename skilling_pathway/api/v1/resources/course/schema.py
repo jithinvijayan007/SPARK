@@ -17,7 +17,7 @@ from skilling_pathway.models.course import *
 def course_grant_create(data,user):
     try:
         grant = session.query(CourseGrantMaster).filter(and_(CourseGrantMaster.participant_id==data.get('participant_id')),\
-                            CourseGrantMaster.course_id==data.get('course_id'),CourseGrantMaster.funder_id==data.get('funder_id')).first()
+                            CourseGrantMaster.course_id==data.get('course_id')).first()
         if grant:
             return {
                 "message": "Allready requested for the same course",
