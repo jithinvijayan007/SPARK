@@ -172,6 +172,7 @@ def profile_update(data,id):
             # prof.email=data.get('email')
             # prof.mobile=data.get('mobile')
             prof.gender=data.get('gender')
+            prof.summary=data.get('summary')
             prof.resume_added = True
             prof.experience = current_experience
             prof.highest_education = data.get('highest_education')

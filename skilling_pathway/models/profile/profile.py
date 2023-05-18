@@ -29,6 +29,7 @@ class ParticipantProfile(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True)
     participant_id = Column(UUID, nullable=True)
     participant_user_id = Column(UUID, nullable=True)
+    summary = Column(TEXT, nullable=True)
 
     highest_education = Column(String, nullable=True)
     english_speaking_level = Column(ARRAY(String), nullable=True)
@@ -58,13 +59,24 @@ class ParticipantProfile(Base):
 
     profile_scores = relationship("ProfileScore", back_populates="participant_profile")
 
+    created_at = Column(DateTime(timezone=True), default=func.now())
+    updated_at = Column(
+        DateTime(timezone=True), default=func.now(), server_onupdate=func.now()
+    )
+
 
 class ProfileScore(Base):
     __tablename__ = "profile_score"
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True)
     score = Column(Float, nullable=False)
+    level = Column(String(10),nullable=True)
     participant_profile_id = Column(UUID(as_uuid=True), ForeignKey("participant_profile.id"))
+    participant_id = Column(UUID, nullable=True)
     participant_profile = relationship("ParticipantProfile", back_populates="profile_scores")
+    created_at = Column(DateTime(timezone=True), default=func.now())
+    updated_at = Column(
+        DateTime(timezone=True), default=func.now(), server_onupdate=func.now()
+    )
 
 
 mg_db = client.skilling_pathway
