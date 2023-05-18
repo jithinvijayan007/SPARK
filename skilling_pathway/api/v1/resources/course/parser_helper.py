@@ -22,6 +22,9 @@ course_content_parser.add_argument(
 course_content_parser.add_argument(
     "tag", type=str, required=False
 )
+course_content_parser.add_argument(
+    "language", type=str, required=False
+)
 
 course_grant_parser = reqparse.RequestParser()
 course_grant_parser.add_argument(

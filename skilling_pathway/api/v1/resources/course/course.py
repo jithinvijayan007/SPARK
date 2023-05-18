@@ -376,7 +376,7 @@ class CoursesByCategoryAPI(API_Resource):
                     "data": {'courses':new_list}
                     }, 200
                 
-            if data.get('tag') and response.status_code in (range(200,299)):
+            elif data.get('tag') and response.status_code in (range(200,299)):
                 new_list = []
                 result = response.json()
                 courses = result.get('courses')
@@ -403,6 +403,66 @@ class CoursesByCategoryAPI(API_Resource):
                     "status": True,
                     "data": {'courses':new_list}
                     }, 200
+                
+            elif data.get('language') and response.status_code in (range(200,299)):
+                new_list = []
+                result_response = response.json()
+                courses = result_response.get('courses')
+                if courses:
+                    for course in courses:
+                        tag_list = []
+                        if course.get('customfields'):
+                            for i in course.get('customfields'):
+                                if i.get('name')== 'Language':
+                                    if i.get('value'):
+                                        lang = i.get('value')
+                                        if data.get('language').lower() in lang.lower():
+                                            new_list.append(course)
+                                            for tag in tag_response_data:
+                                                if tag['course'] == course.get('fullname'):
+                                                    tag_list.append(tag['tag'])
+                                            i['tag_names'] = tag_list
+                                
+                    for i in new_list:
+                        if i.get('overviewfiles'):
+                            for j in i.get('overviewfiles'):
+                                if j.get('fileurl'):
+                                    image_url = j.get('fileurl')
+                                    image = f"{image_url}{sign}{wstoken}"
+                                    i['image'] = image
+
+                    return {
+                    "message": "Courses fetched succefully",
+                    "status": True,
+                    "data": {'courses':new_list}
+                    }, 200
+                
+            # elif data.get('status') and response.status_code in (range(200,299)):
+            #     if data.get('status') == 'all':
+            #         result = response.json()
+            #         courses = result.get('courses')
+            #         if courses:
+            #             for course in courses:
+            #                 tag_list = []
+            #                 if course.get('overviewfiles'):
+            #                     for i in course.get('overviewfiles'):
+            #                         if i.get('fileurl'):
+            #                             image_url = i.get('fileurl')
+            #                             image = f"{image_url}{sign}{wstoken}"
+            #                             course['image'] = image
+            #                 for tag in tag_response_data:
+            #                     if tag['course'] == course.get('fullname'):
+            #                         tag_list.append(tag['tag'])
+            #                 course['tag_names'] = tag_list
+
+            #         result = {'courses':courses}
+                    
+            #         return {
+            #         "message": "Courses fetched succefully",
+            #         "status": True,
+            #         "data": result
+            #         }, 200
+
                 
             elif response.status_code in (range(200,299)):
                 result = response.json()
