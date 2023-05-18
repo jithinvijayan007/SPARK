@@ -286,7 +286,7 @@ class ProfileResumeUpdateApi(API_Resource):
     
 
 class ProfileStatusUpdateAPI(API_Resource):    
-    @api.expect(profile_update_parser)
+    @api.expect(profile_status_update_parser)
     @authenticate
     def put(self, profile_id):
         profile = session.query(ParticipantProfile).filter(ParticipantProfile.id==profile_id).first()
@@ -303,3 +303,11 @@ class ProfileStatusUpdateAPI(API_Resource):
                     "status": False,
                     "data": {}
                 }, 400
+    
+class ProfileUpdateApi(API_Resource):
+    @api.expect(profile_update_parser)
+    @authenticate
+    def put(self,id):
+        data = profile_update_parser.parse_args()
+        resp = profile_update(data, id)
+        return resp

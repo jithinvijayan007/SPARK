@@ -126,3 +126,76 @@ def course_grant_status_update(data):
         session.commit()
         print("validation error",e)
         raise ValueError(str(e.args))
+    
+def profile_update(data,id):
+    try:
+        prof = session.query(ParticipantProfile).filter(ParticipantProfile.id==id).first()
+        if prof:
+            current_skills = data.get('current_skills')
+            if current_skills:
+                current_skills = data.get('current_skills').split(',')
+            current_langs = data.get('other_languages')
+            if current_langs:
+                current_langs = data.get('other_languages').split(',')
+            current_course= data.get('interested_course')
+            if current_course:
+                current_course= data.get('interested_course').split(',')
+            current_qualifi = data.get('educational_qualifications')
+            if current_qualifi:
+                current_qualifi = data.get('educational_qualifications').split(',')
+            current_experience = data.get('experience')
+            if current_experience:
+                current_experience = data.get('experience').split(',')
+            preferred_course_language = data.get('preferred_course_language')
+            if preferred_course_language:
+                preferred_course_language = data.get('preferred_course_language').split(',')
+            preferred_employment_type = data.get('preferred_employment_type')
+            if preferred_employment_type:
+                preferred_employment_type = data.get('preferred_employment_type').split(',')
+            preferred_job_location_city = data.get('preferred_job_location_city')
+            if preferred_job_location_city:
+                preferred_job_location_city = data.get('preferred_job_location_city').split(',')
+            preferred_job_location_state = data.get('preferred_job_location_state')
+            if preferred_job_location_state:
+                preferred_job_location_state = data.get('preferred_job_location_state').split(',')
+            if data.get('preferred_job_role'):
+                preferred_job_role = data.get('preferred_job_role').split(',')
+            preferred_work_place_type = data.get('preferred_work_place_type')
+            if preferred_work_place_type:
+                preferred_work_place_type = data.get('preferred_work_place_type').split(',')
+
+            prof.current_skills=current_skills
+            prof.other_languages=current_langs
+            prof.interested_course=current_course
+            prof.educational_qualifications=current_qualifi
+            prof.address=data.get('address')
+            # prof.email=data.get('email')
+            # prof.mobile=data.get('mobile')
+            prof.gender=data.get('gender')
+            prof.resume_added = True
+            prof.experience = current_experience
+            prof.highest_education = data.get('highest_education')
+            prof.preferred_course_language = preferred_course_language
+            prof.preferred_employment_type = preferred_employment_type
+            prof.preferred_job_location_city = preferred_job_location_city
+            prof.preferred_job_location_state = preferred_job_location_state
+            prof.preferred_job_role = preferred_job_role
+            prof.preferred_work_place_type = preferred_work_place_type
+            session.commit()
+
+            return {
+                    "message": "Profile updated succefully",
+                    "status": True,
+                    "data": {}
+                }, 200
+        return {
+                    "message": "Profile not found ",
+                    "status": False,
+                    "data": {}
+                }, 400
+
+    except Exception as e:
+        session.rollback()
+        session.commit()
+        print("validation error",e)
+        raise ValueError(str(e.args))
