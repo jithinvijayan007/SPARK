@@ -65,3 +65,5 @@ profile_update_parser.add_argument('preferred_job_location_state',type=str,locat
 profile_update_parser.add_argument('preferred_job_role',type=str,location='json')
 profile_update_parser.add_argument('preferred_work_place_type',type=str,location='json')
 profile_update_parser.add_argument('current_employment_details',type=str,location='json')
+profile_update_parser.add_argument('employment_start_date',type=str,location='json')
+profile_update_parser.add_argument('employment_end_date',type=str,location='json')
