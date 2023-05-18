@@ -182,6 +182,7 @@ def profile_update(data,id):
             prof.preferred_job_location_state = preferred_job_location_state
             prof.preferred_job_role = preferred_job_role
             prof.preferred_work_place_type = preferred_work_place_type
+            prof.current_employment_details = data.get('current_employment_details')
             session.commit()
 
             return {
