@@ -444,31 +444,97 @@ class CoursesByCategoryAPI(API_Resource):
                     "data": {'courses':new_list}
                     }, 200
                 
-            # elif data.get('status') and response.status_code in (range(200,299)):
-            #     if data.get('status') == 'all':
-            #         result = response.json()
-            #         courses = result.get('courses')
-            #         if courses:
-            #             for course in courses:
-            #                 tag_list = []
-            #                 if course.get('overviewfiles'):
-            #                     for i in course.get('overviewfiles'):
-            #                         if i.get('fileurl'):
-            #                             image_url = i.get('fileurl')
-            #                             image = f"{image_url}{sign}{wstoken}"
-            #                             course['image'] = image
-            #                 for tag in tag_response_data:
-            #                     if tag['course'] == course.get('fullname'):
-            #                         tag_list.append(tag['tag'])
-            #                 course['tag_names'] = tag_list
+            elif data.get('status') and response.status_code in (range(200,299)):
+                if data.get('status') == 'all':
+                    result = response.json()
+                    courses = result.get('courses')
+                    if courses:
+                        for course in courses:
+                            tag_list = []
+                            if course.get('overviewfiles'):
+                                for i in course.get('overviewfiles'):
+                                    if i.get('fileurl'):
+                                        image_url = i.get('fileurl')
+                                        image = f"{image_url}{sign}{wstoken}"
+                                        course['image'] = image
+                            for tag in tag_response_data:
+                                if tag['course'] == course.get('fullname'):
+                                    tag_list.append(tag['tag'])
+                            course['tag_names'] = tag_list
 
-            #         result = {'courses':courses}
+                    result = {'courses':courses}
                     
-            #         return {
-            #         "message": "Courses fetched succefully",
-            #         "status": True,
-            #         "data": result
-            #         }, 200
+                    return {
+                    "message": "Courses fetched succefully",
+                    "status": True,
+                    "data": result
+                    }, 200
+                
+                if data.get('status') == 'on-going' and data.get('user_name'):
+                    result = response.json()
+                    courses = result.get('courses')
+                    course_list = []
+                    if courses:
+                        for course in courses:
+                            if course.get('id'):
+                                # import pdb;pdb.set_trace()
+                                course_id = course.get('id')
+                                resp_data, status = course_status(course_id,access_token,data)
+                                if resp_data.get('completionstatus'):
+                                    if resp_data['completionstatus']['completed'] == False:
+                                        course_list.append(course)
+                        for cours in course_list:
+                            tag_list = []
+                            if cours.get('overviewfiles'):
+                                for i in cours.get('overviewfiles'):
+                                    if i.get('fileurl'):
+                                        image_url = i.get('fileurl')
+                                        image = f"{image_url}{sign}{wstoken}"
+                                        cours['image'] = image
+                            for tag in tag_response_data:
+                                if tag['course'] == cours.get('fullname'):
+                                    tag_list.append(tag['tag'])
+                            cours['tag_names'] = tag_list
+                    result = {'courses':course_list}
+                    
+                    return {
+                    "message": "Courses fetched succefully",
+                    "status": True,
+                    "data": result
+                    }, 200
+                
+                if data.get('status') == 'completed' and data.get('user_name'):
+                    result = response.json()
+                    courses = result.get('courses')
+                    course_list = []
+                    if courses:
+                        for course in courses:
+                            if course.get('id'):
+                                # import pdb;pdb.set_trace()
+                                course_id = course.get('id')
+                                resp_data, status = course_status(course_id,access_token,data)
+                                if resp_data.get('completionstatus'):
+                                    if resp_data['completionstatus']['completed'] == True:
+                                        course_list.append(course)
+                        for cours in course_list:
+                            tag_list = []
+                            if cours.get('overviewfiles'):
+                                for i in cours.get('overviewfiles'):
+                                    if i.get('fileurl'):
+                                        image_url = i.get('fileurl')
+                                        image = f"{image_url}{sign}{wstoken}"
+                                        cours['image'] = image
+                            for tag in tag_response_data:
+                                if tag['course'] == cours.get('fullname'):
+                                    tag_list.append(tag['tag'])
+                            cours['tag_names'] = tag_list
+                    result = {'courses':course_list}
+                    
+                    return {
+                    "message": "Courses fetched succefully",
+                    "status": True,
+                    "data": result
+                    }, 200
 
                 
             elif response.status_code in (range(200,299)):
