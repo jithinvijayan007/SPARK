@@ -328,6 +328,7 @@ class CoursesByCategoryAPI(API_Resource):
     def get(self):
         try:
             data = course_content_parser.parse_args()
+            access_token = request.headers.get("access-token")
             url = "https://dev.lms.samhita.org//webservice/rest/server.php?wstoken=ca94fadef0865bee849e51f6887320b9&wsfunction=core_course_get_courses_by_field&moodlewsrestformat=json"
 
             payload = 'field=category&value=7'
@@ -477,7 +478,6 @@ class CoursesByCategoryAPI(API_Resource):
                     if courses:
                         for course in courses:
                             if course.get('id'):
-                                # import pdb;pdb.set_trace()
                                 course_id = course.get('id')
                                 resp_data, status = course_status(course_id,access_token,data)
                                 if resp_data.get('completionstatus'):
