@@ -346,6 +346,13 @@ class CoursesByCategoryAPI(API_Resource):
             tag_response = requests.request("GET", url, headers=headers, data=payload)
             tag_response_data = tag_response.json()
 
+            if not(tag_response.status_code in (range(200,299))):
+                return {
+                        "message": "Tag list API From LMS is not working",
+                        "status": False,
+                        "data": {}
+                        }, 500
+
             if data.get('search') and response.status_code in (range(200,299)):
                 new_list = []
                 result_response = response.json()
