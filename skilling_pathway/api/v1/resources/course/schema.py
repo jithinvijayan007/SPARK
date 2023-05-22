@@ -86,3 +86,52 @@ def course_grant_status_update(data):
         session.commit()
         print("validation error",e)
         raise ValueError(str(e.args))
+    
+    
+MOODLE_BASE_URL = os.environ.get("MOODLE_BASE_URL")
+MOODLE_ADMIN_TOKEN = os.environ.get("MOODLE_ADMIN_TOKEN")
+MOODLE_USER_LIST_FN = os.environ.get("MOODLE_USER_LIST_FN")
+MOODLE_COURSE_LIST_FN = os.environ.get("MOODLE_COURSE_LIST_FN")
+
+def course_status(course_id,access_token,request_data):
+    user_details,is_exist = isUserExist(request_data['user_name'],request_data['user_name'])
+    if is_exist:
+        user_id = user_details[0]['id']
+        url = f"{MOODLE_BASE_URL}?wstoken={MOODLE_ADMIN_TOKEN}&wsfunction=core_completion_get_course_completion_status&moodlewsrestformat=json"
+
+        payload={
+                'userid':user_id,
+                'courseid':course_id
+            }
+        headers = {
+        'Content-Type': 'application/x-www-form-urlencoded'
+        }
+        response = requests.request("POST", url, headers=headers, data=payload)
+        json_response = response.json()
+        if json_response.get('completionstatus'):
+            # completions = json_response.get('completionstatus')
+            # completion = completions.get('completions')
+            # length = len(completion)
+            # completed = 0
+            # for i in completion:
+            #     if i.get('complete')  == True:
+            #         completed += 1
+            # percentage = (completed / length) * 100
+            # json_response['completionstatus']['percentage']=percentage
+            return json_response,response.status_code
+        
+        return response.json(),response.status_code
+    
+def isUserExist(email,username):
+    fields = {'email':email,'username':username}
+    for field,value in fields.items():
+        url = f"{MOODLE_BASE_URL}?wstoken={MOODLE_ADMIN_TOKEN}&wsfunction={MOODLE_USER_LIST_FN}&field={field}&values[0]={value}&moodlewsrestformat=json"
+        payload={}
+        headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+        }
+        response = requests.request("GET", url, headers=headers, data=payload)
+        if len(response.json()):
+            return response.json(), True
+    return '',False
