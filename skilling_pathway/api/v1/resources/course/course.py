@@ -376,7 +376,7 @@ class CoursesByCategoryAPI(API_Resource):
                                     image_url = j.get('fileurl')
                                     image = f"{image_url}{sign}{wstoken}"
                                     i['image'] = image
-
+                        
                     return {
                     "message": "Courses fetched succefully",
                     "status": True,
@@ -488,6 +488,11 @@ class CoursesByCategoryAPI(API_Resource):
                                 tag_list.append(tag['tag'])
                         course['tag_names'] = tag_list
 
+                
+                
+                if data['reccomendation']:
+                    course_ids = get_reccomended_course_ids(data['reccomendation'], courses)
+                    courses = [course for course in courses if course['id'] in course_ids]
                 result = {'courses':courses}
                 
                 return {

@@ -26,6 +26,10 @@ course_content_parser.add_argument(
     "language", type=str, required=False
 )
 
+course_content_parser.add_argument(
+    "reccomendation", type=str, required=False
+)
+
 course_grant_parser = reqparse.RequestParser()
 course_grant_parser.add_argument(
     'access-token',type=str,location='headers',required=True,

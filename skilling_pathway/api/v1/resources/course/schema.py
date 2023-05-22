@@ -13,6 +13,11 @@ from skilling_pathway.db_session import session
 import requests
 from skilling_pathway.models.course import *
 
+import pandas as pd
+import numpy as np
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
 
 def course_grant_create(data,user):
     try:
@@ -86,3 +91,35 @@ def course_grant_status_update(data):
         session.commit()
         print("validation error",e)
         raise ValueError(str(e.args))
+
+
+
+def get_course_reccomendation(user_skills,df,num_recc=10):
+    cv = TfidfVectorizer(stop_words='english')
+    course_matrix = cv.fit_transform(df['skills'])
+    user_matrix = cv.transform([user_skills])
+    user_sim = cosine_similarity(user_matrix, course_matrix)[0]
+    cleaned_index = np.argsort(-user_sim)[:num_recc]
+    cleaned_index = [index for index in cleaned_index if user_sim[index] != 0]
+    return df.iloc[cleaned_index, 0]
+
+def get_reccomended_course_ids(user_skills, courses):
+    try:
+        data = [
+        {
+            'id': course['id'],
+            'title': course['fullname'],
+            'tag_name': ', '.join(course['tag_names'])
+        }
+        for course in courses
+        ]
+        df = pd.DataFrame(data)
+        df['skills'] = df[['title', 'tag_name',]].astype(str).agg(' '.join, axis=1)
+        df.drop(['title','tag_name'], inplace=True, axis=1)
+        course_ids = get_course_reccomendation(user_skills, df).values
+        return course_ids
+    
+    except Exception as e:
+         raise ValueError(str(e.args))
+        
+    
