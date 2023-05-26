@@ -33,7 +33,7 @@ def production_connection():
     return conn
 
 def dev_connection():
-    database_host = '13.127.180.224'
+    database_host = '52.66.236.159'
     database_port = 5438
     database_username = 'moodle_user'
     database_password = '7j3rqck39W94jHMTSA92uSy43h7xoV9h'
