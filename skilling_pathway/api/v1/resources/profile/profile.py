@@ -311,3 +311,23 @@ class ProfileUpdateApi(API_Resource):
         data = profile_update_parser.parse_args()
         resp = profile_update(data, id)
         return resp
+    
+class SkillingPathwayDropdownAPI(API_Resource):
+    @authenticate
+    @api.expect(skilling_pathway_dropdown_get_parser)
+    def get(self,profile_id):
+        partcipant = session.query(ParticipantProfile).filter(ParticipantProfile.id == profile_id).first()
+        if partcipant:
+            languages = list(partcipant.preferred_course_language)
+            job_roles = list(partcipant.preferred_job_role)
+            response = {"languages":languages,"job_roles":job_roles}
+            return {
+                    "message": "success",
+                    "status": True,
+                    "data": response
+                }, 200
+        return {
+                    "message": "profile not found",
+                    "status": False,
+                    "data": {}
+                }, 400

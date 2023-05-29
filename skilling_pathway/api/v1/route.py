@@ -7,9 +7,9 @@ from skilling_pathway.api.v1.resources.course.course import (
 from skilling_pathway.api.v1.resources.resume_builder.resume_builder import (ResumeBuilderAPI,
                                                                              UploadResume, ComprehentResume, TextractResume,
                                                                              TextractPdfResume)
-from skilling_pathway.api.v1.resources.course.course import CourseList,CourseByID,CourseGrantAPI,CourseGrantDashboardAPI,CoursesByCategoryAPI
+from skilling_pathway.api.v1.resources.course.course import CourseList,CourseByID,CourseGrantAPI,CourseGrantDashboardAPI,CoursesByCategoryAPI,CourseListNew,CourseContentAPI
 from skilling_pathway.api.v1.resources.profile.profile import ProfileCreateUpdateAPI,ProfileGetAPI,ProfileAPI,ProfileResumeUpdateApi,ProfileStatusUpdateAPI,\
-                                    ProfileUpdateApi                                                           
+                                    ProfileUpdateApi,SkillingPathwayDropdownAPI                                                          
 from skilling_pathway.api.v1.resources.profile.api import GetCertificate,GetCourseTags,CourseTagsList
 
 v1_blueprint = Blueprint(name="v1", import_name=__name__)
@@ -43,4 +43,5 @@ v1_api.add_resource(UploadResume,'/resume-upload/')
 v1_api.add_resource(ComprehentResume,'/comprehent/resume-upload/')
 v1_api.add_resource(TextractResume,'/textract/resume-upload/')
 v1_api.add_resource(TextractPdfResume,'/resume_parser/textract')
+v1_api.add_resource(SkillingPathwayDropdownAPI,'/skilling-pathway/dropdown/<profile_id>/')
 

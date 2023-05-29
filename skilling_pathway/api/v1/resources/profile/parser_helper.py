@@ -67,3 +67,8 @@ profile_update_parser.add_argument('preferred_work_place_type',type=str,location
 profile_update_parser.add_argument('current_employment_details',type=str,location='json')
 profile_update_parser.add_argument('employment_start_date',type=str,location='json')
 profile_update_parser.add_argument('employment_end_date',type=str,location='json')
+
+skilling_pathway_dropdown_get_parser = reqparse.RequestParser()
+skilling_pathway_dropdown_get_parser.add_argument(
+    'access-token',type=str,location='headers',required=True,
+)
