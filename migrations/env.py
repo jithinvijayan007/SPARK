@@ -14,8 +14,8 @@ config = context.config
 # This line sets up loggers basically.
 fileConfig(config.config_file_name)
 logger = logging.getLogger("alembic.env")
-from skilling_pathway.models import *
-from skilling_pathway.models import Base
+from spark.models import *
+from spark.models import Base
 
 target_metadata = Base.metadata
 include_schemas = True

@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import os
-from skilling_pathway.api.app import create_app
+from spark.api.app import create_app
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
 

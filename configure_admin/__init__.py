@@ -1,8 +1,7 @@
 from flask_admin.contrib.sqla import ModelView
 
-from skilling_pathway.models.course.course import (
-    MaritalStatus,
-   MaritalStatus1
+from spark.models.auth.auth import (
+    User
 )
 
 # from skilling_pathway.models.project import MaritalStatus2
